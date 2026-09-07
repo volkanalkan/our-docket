@@ -57,6 +57,17 @@ final class AuthService: ObservableObject {
         try Auth.auth().signOut()
     }
 
+    #if DEBUG
+    /// Apple Developer Program enrollment is still pending, so the Sign in
+    /// with Apple capability can't be registered yet and that flow can't be
+    /// tested end-to-end. This lets development continue on everything
+    /// downstream of auth in the meantime. Compiled out of Release builds.
+    func signInAnonymouslyForDebug() async throws {
+        let result = try await Auth.auth().signInAnonymously()
+        try await ensureUserDocument(uid: result.user.uid, appleUserId: "debug", fullName: nil)
+    }
+    #endif
+
     private func ensureUserDocument(uid: String, appleUserId: String, fullName: PersonNameComponents?) async throws {
         let ref = Firestore.firestore().collection("users").document(uid)
         let snapshot = try await ref.getDocument()

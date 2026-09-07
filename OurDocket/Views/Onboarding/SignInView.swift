@@ -49,6 +49,15 @@ struct SignInView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
                 }
+
+                #if DEBUG
+                Button("Debug: Anonim Giriş") {
+                    Task { await authViewModel.signInAnonymouslyForDebug() }
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
+                #endif
             }
             .padding(.bottom, 48)
         }

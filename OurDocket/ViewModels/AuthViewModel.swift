@@ -15,6 +15,7 @@ final class AuthViewModel: ObservableObject {
     }
 
     @Published private(set) var state: AppState = .loading
+    @Published private(set) var couple: Couple?
     @Published var errorMessage: String?
 
     private let authService: AuthService
@@ -39,6 +40,7 @@ final class AuthViewModel: ObservableObject {
         coupleListener?.remove()
 
         guard let user else {
+            couple = nil
             state = .signedOut
             return
         }
@@ -63,6 +65,7 @@ final class AuthViewModel: ObservableObject {
             .addSnapshotListener { [weak self] snapshot, _ in
                 guard let self else { return }
                 let couple = try? snapshot?.data(as: Couple.self)
+                self.couple = couple
                 self.state = couple?.relationshipStartDate != nil ? .ready(coupleId: coupleId) : .needsStartDate(coupleId: coupleId)
             }
     }
@@ -94,6 +97,17 @@ final class AuthViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
+
+    #if DEBUG
+    func signInAnonymouslyForDebug() async {
+        errorMessage = nil
+        do {
+            try await authService.signInAnonymouslyForDebug()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+    #endif
 
     func generateInviteCode() async -> String? {
         guard let uid = authService.currentUser?.uid else { return nil }
