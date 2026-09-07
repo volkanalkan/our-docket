@@ -49,6 +49,7 @@
 		71C2193921717FC25186458E /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		78CBA7E01B8F74DBEE4C971C /* CaseFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFile.swift; sourceTree = "<group>"; };
 		7F4D3A49117E04EFB1C744A4 /* Couple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Couple.swift; sourceTree = "<group>"; };
+		823F0DAAA2FA4243C5B256E0 /* OurDocket.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OurDocket.entitlements; sourceTree = "<group>"; };
 		840B75111F957B04272E797B /* RelationshipCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipCounterView.swift; sourceTree = "<group>"; };
 		A29BAADCB4EBBEC97C4C8081 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		BCFCCB8E9A8DCA46C15B6F6B /* OurDocket.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OurDocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				DBE64B33D263ECB0A0FF8004 /* GoogleService-Info.plist */,
+				823F0DAAA2FA4243C5B256E0 /* OurDocket.entitlements */,
 				CE5B71CA25CA511F834C10CC /* App */,
 				444C063EA281F38DB7B35205 /* Models */,
 				9F5462678B1164EDD9CD8853 /* Resources */,
@@ -217,6 +219,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					D91900D55560CDA6155232A7 = {
+						DevelopmentTeam = N479NWL495;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 9B5D0273A1A02C03F6F57849 /* Build configuration list for PBXProject "OurDocket" */;
@@ -343,9 +349,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OurDocket/OurDocket.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = N479NWL495;
 				INFOPLIST_FILE = Generated/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -427,9 +436,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = OurDocket/OurDocket.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = N479NWL495;
 				INFOPLIST_FILE = Generated/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
