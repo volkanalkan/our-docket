@@ -6,5 +6,5 @@ struct AppUser: Codable, Identifiable {
     var displayName: String
     var appleUserId: String
     var coupleId: String?
-    var createdAt: Timestamp
+    @ServerTimestamp var createdAt: Timestamp?
 }

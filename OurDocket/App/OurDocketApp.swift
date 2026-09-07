@@ -3,13 +3,16 @@ import FirebaseCore
 
 @main
 struct OurDocketApp: App {
+    @StateObject private var authViewModel = AuthViewModel()
+
     init() {
         FirebaseApp.configure()
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(authViewModel)
         }
     }
 }

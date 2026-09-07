@@ -1,10 +1,9 @@
 import SwiftUI
-import FirebaseCore
 
-struct ContentView: View {
-    private var firebaseStatus: String {
-        FirebaseApp.app() != nil ? "Firebase bağlı: \(FirebaseApp.app()?.options.projectID ?? "-")" : "Firebase yapılandırılamadı"
-    }
+struct HomeView: View {
+    let coupleId: String
+
+    @EnvironmentObject private var authViewModel: AuthViewModel
 
     var body: some View {
         ZStack {
@@ -19,9 +18,14 @@ struct ContentView: View {
                     .font(.system(.largeTitle, design: .serif, weight: .bold))
                     .foregroundStyle(Theme.navy)
 
-                Text(firebaseStatus)
+                Text("Dosya No: \(coupleId.prefix(6).uppercased())")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+
+                Button("Çıkış Yap", role: .destructive) {
+                    authViewModel.signOut()
+                }
+                .padding(.top, 24)
             }
             .padding()
         }
@@ -29,5 +33,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView(coupleId: "preview-couple-id")
+        .environmentObject(AuthViewModel())
 }
