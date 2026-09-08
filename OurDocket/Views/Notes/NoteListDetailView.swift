@@ -27,19 +27,23 @@ struct NoteListDetailView: View {
                     ForEach(list.items) { item in
                         HStack(spacing: 12) {
                             Button {
+                                HapticFeedback.selection()
                                 Task { await viewModel.toggleItem(item, in: list) }
                             } label: {
                                 Image(systemName: item.isDone ? "checkmark.circle.fill" : "circle")
                                     .foregroundStyle(item.isDone ? Theme.gold : Theme.navy.opacity(0.4))
+                                    .animation(.snappy, value: item.isDone)
                             }
                             .buttonStyle(.plain)
 
                             Text(item.text)
                                 .strikethrough(item.isDone)
                                 .foregroundStyle(item.isDone ? .secondary : Theme.navy)
+                                .animation(.default, value: item.isDone)
                         }
                         .swipeActions(edge: .leading) {
                             Button {
+                                HapticFeedback.tap()
                                 editingItem = item
                                 editText = item.text
                             } label: {
@@ -49,6 +53,7 @@ struct NoteListDetailView: View {
                         }
                     }
                     .onDelete { offsets in
+                        HapticFeedback.tap()
                         Task { await viewModel.deleteItems(at: offsets, from: list) }
                     }
                     .listRowBackground(Color.clear)
@@ -63,6 +68,7 @@ struct NoteListDetailView: View {
                     .onSubmit { Task { await addItem() } }
 
                 Button {
+                    HapticFeedback.tap()
                     Task { await addItem() }
                 } label: {
                     Image(systemName: "arrow.up.circle.fill")
@@ -77,6 +83,7 @@ struct NoteListDetailView: View {
             TextField("Madde", text: $editText)
             Button("İptal", role: .cancel) { editingItem = nil }
             Button("Kaydet") {
+                HapticFeedback.tap()
                 if let editingItem {
                     Task { await viewModel.editItem(editingItem, newText: editText, in: list) }
                 }

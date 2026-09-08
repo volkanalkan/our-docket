@@ -22,10 +22,13 @@ struct NewDecisionSheet: View {
                 }
 
                 Section {
-                    Toggle("Apple Calendar'a ekle", isOn: $addToCalendar)
-                    Toggle("Bildirim gönder", isOn: $reminderEnabled)
+                    Toggle("Apple Calendar'a ekle", isOn: $addToCalendar.animation())
+                        .onChange(of: addToCalendar) { _, _ in HapticFeedback.selection() }
+                    Toggle("Bildirim gönder", isOn: $reminderEnabled.animation())
+                        .onChange(of: reminderEnabled) { _, _ in HapticFeedback.selection() }
                     if reminderEnabled {
                         Stepper("Kaç gün önce: \(reminderLeadTime)", value: $reminderLeadTime, in: 1...30)
+                            .onChange(of: reminderLeadTime) { _, _ in HapticFeedback.tap() }
                     }
                 }
 
@@ -37,10 +40,11 @@ struct NewDecisionSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button("İptal") { HapticFeedback.tap(); dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Oluştur") {
+                        HapticFeedback.tap()
                         Task { await createDecision() }
                     }
                     .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || viewModel.isSaving)
@@ -58,6 +62,11 @@ struct NewDecisionSheet: View {
             reminderEnabled: reminderEnabled,
             reminderLeadTime: reminderLeadTime
         )
-        if success { dismiss() }
+        if success {
+            HapticFeedback.success()
+            dismiss()
+        } else {
+            HapticFeedback.error()
+        }
     }
 }

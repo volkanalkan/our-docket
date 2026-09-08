@@ -32,6 +32,7 @@ struct ShortcutCardsView: View {
                     .background(Theme.navy.opacity(0.06))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
+                .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
             }
         }
         .navigationDestination(for: ShortcutCard.self) { card in

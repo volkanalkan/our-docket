@@ -34,10 +34,16 @@ struct StartDateView: View {
                 }
 
                 Button {
+                    HapticFeedback.tap()
                     Task {
                         isSaving = true
                         await authViewModel.setRelationshipStartDate(startDate, coupleId: coupleId)
                         isSaving = false
+                        if authViewModel.errorMessage == nil {
+                            HapticFeedback.success()
+                        } else {
+                            HapticFeedback.error()
+                        }
                     }
                 } label: {
                     Text("Kaydet")

@@ -5,11 +5,12 @@ struct HomeView: View {
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @State private var showingPortraitEditor = false
+    @State private var showingSettings = false
     @State private var portraitImage: UIImage?
 
     var body: some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .topTrailing) {
                 Theme.cream.ignoresSafeArea()
 
                 ScrollView {
@@ -22,15 +23,22 @@ struct HomeView: View {
 
                         ShortcutCardsView(coupleId: coupleId)
                             .padding(.horizontal)
-
-                        Button("Çıkış Yap", role: .destructive) {
-                            authViewModel.signOut()
-                        }
-                        .padding(.top, 12)
                     }
                     .padding(.top, 32)
                     .padding(.bottom, 40)
                 }
+
+                Button {
+                    HapticFeedback.tap()
+                    showingSettings = true
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title3)
+                        .foregroundStyle(Theme.navy)
+                        .padding(10)
+                        .background(.white.opacity(0.6), in: Circle())
+                }
+                .padding()
             }
             .navigationBarHidden(true)
         }
@@ -39,6 +47,9 @@ struct HomeView: View {
                 showingPortraitEditor = false
             }
         }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
+        }
         .task(id: authViewModel.couple?.homePortraitPath) {
             await loadPortrait()
         }
@@ -46,6 +57,7 @@ struct HomeView: View {
 
     private var portraitHeader: some View {
         Button {
+            HapticFeedback.tap()
             showingPortraitEditor = true
         } label: {
             Group {
@@ -53,6 +65,7 @@ struct HomeView: View {
                     Image(uiImage: portraitImage)
                         .resizable()
                         .scaledToFill()
+                        .transition(.opacity)
                 } else {
                     ZStack {
                         Theme.navy.opacity(0.06)
@@ -69,6 +82,7 @@ struct HomeView: View {
             .frame(width: 220, height: 220)
             .clipShape(RoundedRectangle(cornerRadius: 28))
             .overlay(RoundedRectangle(cornerRadius: 28).stroke(Theme.gold, lineWidth: 2))
+            .animation(.default, value: portraitImage)
         }
         .buttonStyle(.plain)
     }

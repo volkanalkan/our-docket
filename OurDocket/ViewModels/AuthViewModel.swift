@@ -116,6 +116,15 @@ final class AuthViewModel: ObservableObject {
         }
     }
 
+    func deleteAccount() async {
+        errorMessage = nil
+        do {
+            try await authService.deleteAccount()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     #if DEBUG
     func signInAnonymouslyForDebug() async {
         errorMessage = nil

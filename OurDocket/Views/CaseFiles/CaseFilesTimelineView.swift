@@ -38,6 +38,7 @@ struct CaseFilesTimelineView: View {
                                 CaseFileCardView(file: file, number: viewModel.fileNumber(for: file))
                             }
                             .buttonStyle(.plain)
+                            .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
                         }
                         .padding(.bottom, 20)
                     }

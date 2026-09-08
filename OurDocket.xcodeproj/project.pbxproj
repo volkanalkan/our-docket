@@ -20,17 +20,20 @@
 		227B9C6485BDD854DC189DF9 /* CaseFileDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858AAB2B4E9971636AB60FC8 /* CaseFileDetailView.swift */; };
 		26CE5A606ED82B8280B36D26 /* PortraitCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B280995CEA93012E68E9E /* PortraitCropView.swift */; };
 		29AB38EC03690AB12B27A0F8 /* Couple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4D3A49117E04EFB1C744A4 /* Couple.swift */; };
+		3100B56C8FD9619B772D4404 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DFD8B33EA30E398BF9AD89 /* HapticFeedback.swift */; };
 		370F4CBE7D2F785689A751FA /* StartDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F828BAD0A8079B36091EAF83 /* StartDateView.swift */; };
 		38CD074848882F7AD01E0BB1 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D0D52C18E9D8651014454C /* RootView.swift */; };
 		3A626BF47B710E34979AE33D /* CaseFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ADF66F322778C229A0D5B4 /* CaseFileService.swift */; };
 		3B1616257F88B3120D8CDE03 /* Decision.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D50BBEAF81A874C9A2DC77 /* Decision.swift */; };
 		42B7896A6F44BFD3F04DDD26 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBFC7C9C6E5053A83326851 /* Theme.swift */; };
+		4936508E9D2616DB1C7D1D16 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B58EEE9C69DC1716DCA176C /* SettingsView.swift */; };
 		4BD00B1FBDF2CCDE53ED4844 /* RelationshipCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B75111F957B04272E797B /* RelationshipCounterView.swift */; };
 		4E53E5321094AD3E82B5E01D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = ABCAA589C528E3A33410E072 /* FirebaseCore */; };
 		5781885AB3D356D493087033 /* DecisionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249FCC2FD33586CEE62DCC24 /* DecisionsListView.swift */; };
 		5CF53232B518274B2EDFEF45 /* CaseFilesTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D256A6F3E7C8BCC9460093 /* CaseFilesTimelineView.swift */; };
 		669D85B28FFAE047B7444F33 /* NoteListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39787B174C29AE713BAB775A /* NoteListDetailView.swift */; };
 		67361EB3EC1E7A6D5F1AE21F /* CaseFilesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC97AA3663B7E60CB4C138E /* CaseFilesListView.swift */; };
+		73B570C5697B5792985CD800 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DFD8B33EA30E398BF9AD89 /* HapticFeedback.swift */; };
 		7A9E521B724D533DB6F1386A /* OurDocketWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FDE54B2F4B7A7E66E3189A2C /* OurDocketWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		7BB1C8CC83CA5AD89CCFE7EC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBFC7C9C6E5053A83326851 /* Theme.swift */; };
 		81EC87276BE4F2DF93DBB435 /* PairingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA0F1A901CA0485AD772D6 /* PairingService.swift */; };
@@ -88,6 +91,7 @@
 		0B4B280995CEA93012E68E9E /* PortraitCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortraitCropView.swift; sourceTree = "<group>"; };
 		0E4FA17206DDA60F1C232C6A /* ShortcutCardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutCardsView.swift; sourceTree = "<group>"; };
 		11BA0F1A901CA0485AD772D6 /* PairingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingService.swift; sourceTree = "<group>"; };
+		17DFD8B33EA30E398BF9AD89 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		1C52077A4FC0126B911E6C4C /* NoteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteList.swift; sourceTree = "<group>"; };
 		1DBFC7C9C6E5053A83326851 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		22D256A6F3E7C8BCC9460093 /* CaseFilesTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFilesTimelineView.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 		5ABD03B0FC975357032DFDA3 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		71C2193921717FC25186458E /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		78CBA7E01B8F74DBEE4C971C /* CaseFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFile.swift; sourceTree = "<group>"; };
+		7B58EEE9C69DC1716DCA176C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7F4D3A49117E04EFB1C744A4 /* Couple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Couple.swift; sourceTree = "<group>"; };
 		823F0DAAA2FA4243C5B256E0 /* OurDocket.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OurDocket.entitlements; sourceTree = "<group>"; };
 		840B75111F957B04272E797B /* RelationshipCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipCounterView.swift; sourceTree = "<group>"; };
@@ -182,6 +187,7 @@
 		77B69F772B34736D8B06665A /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				17DFD8B33EA30E398BF9AD89 /* HapticFeedback.swift */,
 				0A979819297FB494039757C9 /* SharedRelationshipStore.swift */,
 				1DBFC7C9C6E5053A83326851 /* Theme.swift */,
 			);
@@ -239,6 +245,7 @@
 			children = (
 				2DCF1ABA8739D492E7A99F8C /* HomeView.swift */,
 				F6D0D52C18E9D8651014454C /* RootView.swift */,
+				7B58EEE9C69DC1716DCA176C /* SettingsView.swift */,
 				7A6E9165F0F2E32B4826BCCC /* CaseFiles */,
 				C114D24E40EEFDA95C746632 /* Decisions */,
 				8F75651B93917885D98C65E8 /* Home */,
@@ -419,6 +426,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73B570C5697B5792985CD800 /* HapticFeedback.swift in Sources */,
 				C04407E895E14733058C365C /* OurDocketWidget.swift in Sources */,
 				87BDF2581724CE12B87D3616 /* OurDocketWidgetBundle.swift in Sources */,
 				F33D91FA7C275341476B1EFD /* SharedRelationshipStore.swift in Sources */,
@@ -444,6 +452,7 @@
 				5781885AB3D356D493087033 /* DecisionsListView.swift in Sources */,
 				132DF2803630F9DA2971189C /* DecisionsService.swift in Sources */,
 				00E2704921CBA6838F7A99C1 /* DecisionsViewModel.swift in Sources */,
+				3100B56C8FD9619B772D4404 /* HapticFeedback.swift in Sources */,
 				1016CCB7ACBB4D2BF27649BB /* HomeView.swift in Sources */,
 				A3D248CC774E040A8C5856B7 /* MediaThumbnailView.swift in Sources */,
 				9B4A573C31484F90561041F4 /* MediaViewerView.swift in Sources */,
@@ -461,6 +470,7 @@
 				B4A555076452197A45BEF41E /* PortraitService.swift in Sources */,
 				4BD00B1FBDF2CCDE53ED4844 /* RelationshipCounterView.swift in Sources */,
 				38CD074848882F7AD01E0BB1 /* RootView.swift in Sources */,
+				4936508E9D2616DB1C7D1D16 /* SettingsView.swift in Sources */,
 				19A94F8B50784EEC876A818F /* SharedRelationshipStore.swift in Sources */,
 				FA386C59CCF1BB4BE3AFF491 /* ShortcutCardsView.swift in Sources */,
 				1A90D267C1B874276F162A3F /* SignInView.swift in Sources */,

@@ -44,6 +44,7 @@ struct PairingView: View {
                 Spacer()
 
                 Button("Çıkış Yap", role: .destructive) {
+                    HapticFeedback.tap()
                     authViewModel.signOut()
                 }
                 .font(.footnote)
@@ -55,11 +56,17 @@ struct PairingView: View {
     private var chooseView: some View {
         VStack(spacing: 16) {
             Button {
+                HapticFeedback.tap()
                 Task {
                     isBusy = true
                     generatedCode = await authViewModel.generateInviteCode()
                     isBusy = false
-                    if generatedCode != nil { mode = .showCode }
+                    if generatedCode != nil {
+                        HapticFeedback.success()
+                        withAnimation { mode = .showCode }
+                    } else {
+                        HapticFeedback.error()
+                    }
                 }
             } label: {
                 Label("Davet Kodu Oluştur", systemImage: "person.badge.plus")
@@ -69,8 +76,9 @@ struct PairingView: View {
             .tint(Theme.navy)
 
             Button {
+                HapticFeedback.tap()
                 authViewModel.errorMessage = nil
-                mode = .enterCode
+                withAnimation { mode = .enterCode }
             } label: {
                 Label("Davet Kodu Gir", systemImage: "number")
                     .frame(maxWidth: .infinity)
@@ -95,7 +103,7 @@ struct PairingView: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Button("Geri") { mode = .choose }
+            Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }
                 .font(.footnote)
                 .padding(.top, 8)
         }
@@ -114,10 +122,16 @@ struct PairingView: View {
                 }
 
             Button {
+                HapticFeedback.tap()
                 Task {
                     isBusy = true
                     await authViewModel.redeemInviteCode(enteredCode)
                     isBusy = false
+                    if authViewModel.errorMessage != nil {
+                        HapticFeedback.error()
+                    } else {
+                        HapticFeedback.success()
+                    }
                 }
             } label: {
                 Text("Eşleş")
@@ -127,7 +141,7 @@ struct PairingView: View {
             .tint(Theme.navy)
             .disabled(enteredCode.count != 6 || isBusy)
 
-            Button("Geri") { mode = .choose }
+            Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }
                 .font(.footnote)
         }
     }

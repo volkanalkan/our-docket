@@ -35,12 +35,14 @@ struct NotesView: View {
 
                 if let selectedList {
                     NoteListDetailView(viewModel: viewModel, list: selectedList)
+                        .transition(.opacity)
                 } else {
                     Spacer()
                     ProgressView()
                     Spacer()
                 }
             }
+            .animation(.default, value: selectedList?.id)
             .padding(.top, 12)
         }
         .navigationTitle("Notlar")
@@ -48,6 +50,7 @@ struct NotesView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
+                    HapticFeedback.tap()
                     newListTitle = ""
                     showingNewListAlert = true
                 } label: {
@@ -59,6 +62,7 @@ struct NotesView: View {
             TextField("örn. Market Alışverişi", text: $newListTitle)
             Button("İptal", role: .cancel) {}
             Button("Oluştur") {
+                HapticFeedback.tap()
                 Task { await viewModel.createList(title: newListTitle) }
             }
         }
@@ -70,6 +74,7 @@ struct NotesView: View {
                 ForEach(viewModel.lists) { list in
                     let isSelected = selectedList?.id == list.id
                     Button {
+                        HapticFeedback.selection()
                         selectedListId = list.id
                     } label: {
                         Text(list.title)

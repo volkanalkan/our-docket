@@ -30,6 +30,7 @@ struct MediaViewerView: View {
                 HStack {
                     Spacer()
                     Button {
+                        HapticFeedback.tap()
                         dismiss()
                     } label: {
                         Image(systemName: "xmark.circle.fill")

@@ -27,6 +27,8 @@ service cloud.firestore {
           request.auth.uid in get(/databases/$(database)/documents/couples/$(request.resource.data.coupleId)).data.memberUids
         )
       );
+
+      allow delete: if isSignedIn() && request.auth.uid == uid;
     }
 
     match /inviteCodes/{code} {

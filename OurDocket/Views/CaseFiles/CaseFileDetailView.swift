@@ -70,11 +70,14 @@ struct CaseFileDetailView: View {
                                 MediaThumbnailView(item: item, viewModel: viewModel)
                             }
                             .onTapGesture {
+                                HapticFeedback.tap()
                                 selectedMediaItem = item
                             }
+                            .transition(.scale.combined(with: .opacity))
                         }
                     }
                     .padding(.horizontal, 4)
+                    .animation(.default, value: currentFile.mediaItems.count)
                 }
                 .padding(.vertical)
             }
@@ -88,6 +91,11 @@ struct CaseFileDetailView: View {
                 await viewModel.uploadMedia(newItems, fileId: fileId, uploadedBy: uid)
                 selectedPickerItems = []
                 isUploading = false
+                if viewModel.errorMessage == nil {
+                    HapticFeedback.success()
+                } else {
+                    HapticFeedback.error()
+                }
             }
         }
         .fullScreenCover(item: $selectedMediaItem) { item in

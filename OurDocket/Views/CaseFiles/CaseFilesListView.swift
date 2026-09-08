@@ -36,19 +36,24 @@ struct CaseFilesListView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding(.horizontal)
+                .onChange(of: displayMode) { _, _ in HapticFeedback.selection() }
 
                 categoryFilter
 
-                if filteredFiles.isEmpty {
-                    emptyState
-                } else {
-                    switch displayMode {
-                    case .cards:
-                        cardsList
-                    case .timeline:
-                        CaseFilesTimelineView(coupleId: coupleId, viewModel: viewModel, files: filteredFiles)
+                Group {
+                    if filteredFiles.isEmpty {
+                        emptyState
+                    } else {
+                        switch displayMode {
+                        case .cards:
+                            cardsList
+                        case .timeline:
+                            CaseFilesTimelineView(coupleId: coupleId, viewModel: viewModel, files: filteredFiles)
+                        }
                     }
                 }
+                .animation(.default, value: displayMode)
+                .animation(.default, value: filteredFiles.count)
             }
             .padding(.top, 12)
         }
@@ -57,6 +62,7 @@ struct CaseFilesListView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
+                    HapticFeedback.tap()
                     showingNewFileSheet = true
                 } label: {
                     Image(systemName: "plus.circle.fill")
@@ -85,7 +91,10 @@ struct CaseFilesListView: View {
     }
 
     private func categoryChip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+        Button {
+            HapticFeedback.selection()
+            withAnimation(.snappy) { action() }
+        } label: {
             Text(title)
                 .font(.footnote.weight(.medium))
                 .padding(.horizontal, 14)
@@ -122,6 +131,7 @@ struct CaseFilesListView: View {
                         CaseFileCardView(file: file, number: viewModel.fileNumber(for: file))
                     }
                     .buttonStyle(.plain)
+                    .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
                 }
             }
             .padding()

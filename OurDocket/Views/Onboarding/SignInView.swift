@@ -10,6 +10,15 @@ struct SignInView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 24) {
+                #if DEBUG
+                Button("Debug: Anonim Giriş") {
+                    Task { await authViewModel.signInAnonymouslyForDebug() }
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .padding(.top, 20)
+                #endif
+
                 Spacer()
 
                 VStack(spacing: 12) {
@@ -36,6 +45,9 @@ struct SignInView: View {
                 } onCompletion: { result in
                     Task {
                         await authViewModel.handleSignInWithApple(result: result, rawNonce: currentNonce)
+                        if authViewModel.errorMessage != nil {
+                            HapticFeedback.error()
+                        }
                     }
                 }
                 .signInWithAppleButtonStyle(.black)
@@ -48,17 +60,10 @@ struct SignInView: View {
                         .foregroundStyle(.red)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
+                        .transition(.opacity)
                 }
-
-                #if DEBUG
-                Button("Debug: Anonim Giriş") {
-                    Task { await authViewModel.signInAnonymouslyForDebug() }
-                }
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .padding(.top, 8)
-                #endif
             }
+            .animation(.default, value: authViewModel.errorMessage)
             .padding(.bottom, 48)
         }
     }

@@ -54,6 +54,7 @@ struct PortraitCropView: View {
 
                     if sourceImage != nil {
                         Button {
+                            HapticFeedback.tap()
                             Task { await save() }
                         } label: {
                             Group {
@@ -77,7 +78,7 @@ struct PortraitCropView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button("İptal") { HapticFeedback.tap(); dismiss() }
                 }
             }
             .onChange(of: photosPickerItem) { _, newValue in
@@ -162,9 +163,10 @@ struct PortraitCropView: View {
         let cropped = renderCroppedImage(source: sourceImage)
         do {
             try await PortraitService().uploadPortrait(cropped, coupleId: coupleId)
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
+            HapticFeedback.success()
             onFinished()
         } catch {
+            HapticFeedback.error()
             errorMessage = error.localizedDescription
         }
     }

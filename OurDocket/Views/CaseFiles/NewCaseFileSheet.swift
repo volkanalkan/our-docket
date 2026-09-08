@@ -34,10 +34,11 @@ struct NewCaseFileSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button("İptal") { HapticFeedback.tap(); dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Oluştur") {
+                        HapticFeedback.tap()
                         Task { await createFile() }
                     }
                     .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || isSaving)
@@ -51,6 +52,11 @@ struct NewCaseFileSheet: View {
         isSaving = true
         let success = await viewModel.createCaseFile(title: title, category: category, createdBy: uid)
         isSaving = false
-        if success { dismiss() }
+        if success {
+            HapticFeedback.success()
+            dismiss()
+        } else {
+            HapticFeedback.error()
+        }
     }
 }

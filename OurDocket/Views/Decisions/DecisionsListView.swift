@@ -22,17 +22,20 @@ struct DecisionsListView: View {
                     LazyVStack(spacing: 14) {
                         ForEach(viewModel.decisions) { decision in
                             DecisionCardView(decision: decision, number: viewModel.decisionNumber(for: decision))
+                                .transition(.opacity.combined(with: .move(edge: .top)))
                         }
                     }
                     .padding()
                 }
             }
         }
+        .animation(.default, value: viewModel.decisions.count)
         .navigationTitle("Kararlar")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
+                    HapticFeedback.tap()
                     showingNewSheet = true
                 } label: {
                     Image(systemName: "plus.circle.fill")

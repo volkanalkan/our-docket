@@ -57,11 +57,22 @@ final class AuthService: ObservableObject {
         try Auth.auth().signOut()
     }
 
+    /// Required for App Store review (Guideline 5.1.1(v)): apps offering
+    /// account creation must let the user delete their account. Shared
+    /// couple data (case files, notes, decisions) intentionally isn't
+    /// touched here — it belongs to the partner too, not just this user.
+    /// If Firebase reports the sign-in is too old for this sensitive an
+    /// operation, surface that as a clear error rather than silently
+    /// re-authenticating on the user's behalf.
+    func deleteAccount() async throws {
+        guard let user = Auth.auth().currentUser else { return }
+        try await Firestore.firestore().collection("users").document(user.uid).delete()
+        try await user.delete()
+    }
+
     #if DEBUG
-    /// Apple Developer Program enrollment is still pending, so the Sign in
-    /// with Apple capability can't be registered yet and that flow can't be
-    /// tested end-to-end. This lets development continue on everything
-    /// downstream of auth in the meantime. Compiled out of Release builds.
+    /// Lets development continue on everything downstream of auth without
+    /// needing a real Apple ID on hand. Compiled out of Release builds.
     func signInAnonymouslyForDebug() async throws {
         let result = try await Auth.auth().signInAnonymously()
         try await ensureUserDocument(uid: result.user.uid, appleUserId: "debug", fullName: nil)
