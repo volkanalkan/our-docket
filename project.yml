@@ -25,6 +25,8 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        NSCalendarsFullAccessUsageDescription: "Kararlarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor."
+        NSCalendarsWriteOnlyAccessUsageDescription: "Kararlarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.volkan.ourdocket

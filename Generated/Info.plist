@@ -22,6 +22,10 @@
 	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Kararlarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>Kararlarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

@@ -9,4 +9,5 @@ struct Decision: Codable, Identifiable {
     var addToCalendar: Bool
     var reminderEnabled: Bool
     var reminderLeadTime: Int
+    @ServerTimestamp var createdAt: Timestamp?
 }

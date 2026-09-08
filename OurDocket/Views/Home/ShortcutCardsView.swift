@@ -40,6 +40,8 @@ struct ShortcutCardsView: View {
                 CaseFilesListView(coupleId: coupleId)
             case "Notlar":
                 NotesView(coupleId: coupleId)
+            case "Kararlar":
+                DecisionsListView(coupleId: coupleId)
             default:
                 ComingSoonView(title: card.title)
             }
