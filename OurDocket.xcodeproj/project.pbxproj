@@ -24,8 +24,10 @@
 		4BD00B1FBDF2CCDE53ED4844 /* RelationshipCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B75111F957B04272E797B /* RelationshipCounterView.swift */; };
 		4E53E5321094AD3E82B5E01D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = ABCAA589C528E3A33410E072 /* FirebaseCore */; };
 		5CF53232B518274B2EDFEF45 /* CaseFilesTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D256A6F3E7C8BCC9460093 /* CaseFilesTimelineView.swift */; };
+		669D85B28FFAE047B7444F33 /* NoteListDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39787B174C29AE713BAB775A /* NoteListDetailView.swift */; };
 		67361EB3EC1E7A6D5F1AE21F /* CaseFilesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC97AA3663B7E60CB4C138E /* CaseFilesListView.swift */; };
 		81EC87276BE4F2DF93DBB435 /* PairingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BA0F1A901CA0485AD772D6 /* PairingService.swift */; };
+		8231EED401B90833E488ACCA /* NotesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841CAA66C348DA56B7C5547A /* NotesService.swift */; };
 		85007677B0D50B6D3F14BD13 /* OurDocketApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD01B7480B26655DDEF8EC6 /* OurDocketApp.swift */; };
 		8ABCFBDAA3963EDF685DA10E /* CaseFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78CBA7E01B8F74DBEE4C971C /* CaseFile.swift */; };
 		9B4A573C31484F90561041F4 /* MediaViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEECBE3A12000231C44187B /* MediaViewerView.swift */; };
@@ -36,6 +38,8 @@
 		C045ECDF8D95BBE7D813DA9A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = E5BE683CE8BC0471E4714102 /* FirebaseStorage */; };
 		C10AD0652515C2935DDEA734 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 48F4CEA2F1A635556EA19778 /* FirebaseAuth */; };
 		CA5CBC486FF1D924FE7C6A89 /* NoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C52077A4FC0126B911E6C4C /* NoteList.swift */; };
+		CB07E0DC834E8CC3C8611114 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF48F1E120A92AFFE6ED9219 /* NotesView.swift */; };
+		D4DAAECB66082D5FBD14CB72 /* NotesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABD03B0FC975357032DFDA3 /* NotesViewModel.swift */; };
 		D6B0B6DFDD3407CDF696A1D5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F76174749A62F43C2CE93719 /* AuthService.swift */; };
 		DB0949DD40EABB5F8853A4DF /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71C2193921717FC25186458E /* AuthViewModel.swift */; };
 		DD86FE8BB1B5F35E435180BB /* CaseFilesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E328274FE56BF3B030B7D4B /* CaseFilesViewModel.swift */; };
@@ -53,14 +57,17 @@
 		2FD01B7480B26655DDEF8EC6 /* OurDocketApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OurDocketApp.swift; sourceTree = "<group>"; };
 		319A26E4DFF6EF585AF0FE1F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		345354C6541E6C653AE820B8 /* PairingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairingView.swift; sourceTree = "<group>"; };
+		39787B174C29AE713BAB775A /* NoteListDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListDetailView.swift; sourceTree = "<group>"; };
 		479A0F779956A0014A1D487A /* PortraitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortraitService.swift; sourceTree = "<group>"; };
 		4C516C8BAF4B3E22E50670BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5106CEF01E60E452D3058096 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		5ABD03B0FC975357032DFDA3 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		71C2193921717FC25186458E /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		78CBA7E01B8F74DBEE4C971C /* CaseFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFile.swift; sourceTree = "<group>"; };
 		7F4D3A49117E04EFB1C744A4 /* Couple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Couple.swift; sourceTree = "<group>"; };
 		823F0DAAA2FA4243C5B256E0 /* OurDocket.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OurDocket.entitlements; sourceTree = "<group>"; };
 		840B75111F957B04272E797B /* RelationshipCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipCounterView.swift; sourceTree = "<group>"; };
+		841CAA66C348DA56B7C5547A /* NotesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService.swift; sourceTree = "<group>"; };
 		858AAB2B4E9971636AB60FC8 /* CaseFileDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFileDetailView.swift; sourceTree = "<group>"; };
 		8BEECBE3A12000231C44187B /* MediaViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaViewerView.swift; sourceTree = "<group>"; };
 		A1ADF66F322778C229A0D5B4 /* CaseFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFileService.swift; sourceTree = "<group>"; };
@@ -70,6 +77,7 @@
 		BEC97AA3663B7E60CB4C138E /* CaseFilesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFilesListView.swift; sourceTree = "<group>"; };
 		CCD0E90971866DB8E3B3AB19 /* MediaThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaThumbnailView.swift; sourceTree = "<group>"; };
 		DBE64B33D263ECB0A0FF8004 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DF48F1E120A92AFFE6ED9219 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		E0D50BBEAF81A874C9A2DC77 /* Decision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decision.swift; sourceTree = "<group>"; };
 		F6D0D52C18E9D8651014454C /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		F76174749A62F43C2CE93719 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -96,6 +104,7 @@
 			children = (
 				F76174749A62F43C2CE93719 /* AuthService.swift */,
 				A1ADF66F322778C229A0D5B4 /* CaseFileService.swift */,
+				841CAA66C348DA56B7C5547A /* NotesService.swift */,
 				11BA0F1A901CA0485AD772D6 /* PairingService.swift */,
 				479A0F779956A0014A1D487A /* PortraitService.swift */,
 			);
@@ -175,6 +184,7 @@
 				F6D0D52C18E9D8651014454C /* RootView.swift */,
 				7A6E9165F0F2E32B4826BCCC /* CaseFiles */,
 				8F75651B93917885D98C65E8 /* Home */,
+				CA4686AF0B55BDA3DD90CDF3 /* Notes */,
 				A9619D0FD91C520583C13132 /* Onboarding */,
 			);
 			path = Views;
@@ -188,6 +198,15 @@
 				F828BAD0A8079B36091EAF83 /* StartDateView.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		CA4686AF0B55BDA3DD90CDF3 /* Notes */ = {
+			isa = PBXGroup;
+			children = (
+				39787B174C29AE713BAB775A /* NoteListDetailView.swift */,
+				DF48F1E120A92AFFE6ED9219 /* NotesView.swift */,
+			);
+			path = Notes;
 			sourceTree = "<group>";
 		};
 		CE5B71CA25CA511F834C10CC /* App */ = {
@@ -212,6 +231,7 @@
 			children = (
 				71C2193921717FC25186458E /* AuthViewModel.swift */,
 				2E328274FE56BF3B030B7D4B /* CaseFilesViewModel.swift */,
+				5ABD03B0FC975357032DFDA3 /* NotesViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -311,6 +331,10 @@
 				9B4A573C31484F90561041F4 /* MediaViewerView.swift in Sources */,
 				BB82E26EC86C6480F6F29AEF /* NewCaseFileSheet.swift in Sources */,
 				CA5CBC486FF1D924FE7C6A89 /* NoteList.swift in Sources */,
+				669D85B28FFAE047B7444F33 /* NoteListDetailView.swift in Sources */,
+				8231EED401B90833E488ACCA /* NotesService.swift in Sources */,
+				CB07E0DC834E8CC3C8611114 /* NotesView.swift in Sources */,
+				D4DAAECB66082D5FBD14CB72 /* NotesViewModel.swift in Sources */,
 				85007677B0D50B6D3F14BD13 /* OurDocketApp.swift in Sources */,
 				81EC87276BE4F2DF93DBB435 /* PairingService.swift in Sources */,
 				15F9F76333035682876AAF12 /* PairingView.swift in Sources */,

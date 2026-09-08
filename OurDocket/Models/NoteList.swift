@@ -13,4 +13,5 @@ struct NoteList: Codable, Identifiable {
     @DocumentID var id: String?
     var title: String
     var items: [NoteItem]
+    @ServerTimestamp var createdAt: Timestamp?
 }

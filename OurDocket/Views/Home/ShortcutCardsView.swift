@@ -35,9 +35,12 @@ struct ShortcutCardsView: View {
             }
         }
         .navigationDestination(for: ShortcutCard.self) { card in
-            if card.title == "Anı Dosyaları" {
+            switch card.title {
+            case "Anı Dosyaları":
                 CaseFilesListView(coupleId: coupleId)
-            } else {
+            case "Notlar":
+                NotesView(coupleId: coupleId)
+            default:
                 ComingSoonView(title: card.title)
             }
         }
