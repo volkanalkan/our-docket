@@ -6,6 +6,15 @@ enum MediaType: String, Codable {
     case video
 }
 
+enum CaseFileCategory: String, CaseIterable, Identifiable {
+    case tatil = "Tatil"
+    case ozelGun = "Özel Gün"
+    case gunluk = "Günlük"
+    case diger = "Diğer"
+
+    var id: String { rawValue }
+}
+
 struct MediaItem: Codable, Identifiable {
     var id: String { storagePath }
     var storagePath: String
@@ -19,7 +28,7 @@ struct CaseFile: Codable, Identifiable {
     @DocumentID var id: String?
     var title: String
     var createdBy: String
-    var createdAt: Timestamp
+    @ServerTimestamp var createdAt: Timestamp?
     var category: String
     var mediaItems: [MediaItem]
 }

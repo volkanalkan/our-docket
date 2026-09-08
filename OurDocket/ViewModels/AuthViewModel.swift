@@ -18,6 +18,8 @@ final class AuthViewModel: ObservableObject {
     @Published private(set) var couple: Couple?
     @Published var errorMessage: String?
 
+    var currentUserId: String? { authService.currentUser?.uid }
+
     private let authService: AuthService
     private let pairingService = PairingService()
 

@@ -7,6 +7,8 @@ struct ShortcutCard: Identifiable, Hashable {
 }
 
 struct ShortcutCardsView: View {
+    let coupleId: String
+
     private let cards: [ShortcutCard] = [
         ShortcutCard(title: "Anı Dosyaları", systemImage: "folder.fill"),
         ShortcutCard(title: "Notlar", systemImage: "checklist"),
@@ -33,7 +35,11 @@ struct ShortcutCardsView: View {
             }
         }
         .navigationDestination(for: ShortcutCard.self) { card in
-            ComingSoonView(title: card.title)
+            if card.title == "Anı Dosyaları" {
+                CaseFilesListView(coupleId: coupleId)
+            } else {
+                ComingSoonView(title: card.title)
+            }
         }
     }
 }
@@ -62,6 +68,6 @@ struct ComingSoonView: View {
 
 #Preview {
     NavigationStack {
-        ShortcutCardsView().padding()
+        ShortcutCardsView(coupleId: "preview").padding()
     }
 }

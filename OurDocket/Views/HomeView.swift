@@ -20,7 +20,7 @@ struct HomeView: View {
                             RelationshipCounterView(startDate: startDate)
                         }
 
-                        ShortcutCardsView()
+                        ShortcutCardsView(coupleId: coupleId)
                             .padding(.horizontal)
 
                         Button("Çıkış Yap", role: .destructive) {
