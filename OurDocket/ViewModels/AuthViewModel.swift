@@ -24,6 +24,7 @@ final class AuthViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var userListener: ListenerRegistration?
     private var coupleListener: ListenerRegistration?
+    private var observedCoupleId: String?
 
     init(authService: AuthService? = nil) {
         self.authService = authService ?? AuthService()
@@ -38,6 +39,7 @@ final class AuthViewModel: ObservableObject {
     private func handleAuthChange(user: FirebaseAuth.User?) {
         userListener?.remove()
         coupleListener?.remove()
+        observedCoupleId = nil
 
         guard let user else {
             couple = nil
@@ -53,7 +55,16 @@ final class AuthViewModel: ObservableObject {
             }
     }
 
+    /// The users/{uid} listener can redeliver the same coupleId more than
+    /// once (e.g. an initial cache snapshot followed by a server snapshot).
+    /// Tearing down and re-attaching the couple listener on every one of
+    /// those deliveries can race with our own writes to that document — a
+    /// fresh listener's first fetch can momentarily miss a write that's
+    /// still in flight, leaving the UI stuck until the next launch. Only
+    /// touch the couple listener when the coupleId actually changes.
     private func handleUserDocument(coupleId: String?) {
+        guard coupleId != observedCoupleId else { return }
+        observedCoupleId = coupleId
         coupleListener?.remove()
 
         guard let coupleId, !coupleId.isEmpty else {
