@@ -5,12 +5,14 @@ struct CaseFilesListView: View {
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @StateObject private var viewModel: CaseFilesViewModel
-    @State private var displayMode: DisplayMode = .cards
-    @State private var selectedCategory: CaseFileCategory?
+    @State private var displayMode: DisplayMode = .list
+    @State private var selectedCategory: String?
     @State private var showingNewFileSheet = false
+    @State private var editingFile: CaseFile?
+    @State private var deletingFile: CaseFile?
 
     enum DisplayMode: String, CaseIterable {
-        case cards = "Kartlar"
+        case list = "Liste"
         case timeline = "Zaman Çizelgesi"
     }
 
@@ -21,7 +23,7 @@ struct CaseFilesListView: View {
 
     private var filteredFiles: [CaseFile] {
         guard let selectedCategory else { return viewModel.caseFiles }
-        return viewModel.caseFiles.filter { $0.category == selectedCategory.rawValue }
+        return viewModel.caseFiles.filter { $0.category == selectedCategory }
     }
 
     var body: some View {
@@ -29,6 +31,12 @@ struct CaseFilesListView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 16) {
+                HeaderBar(title: "Arşiv") {
+                    HeaderIconButton(systemImage: "plus") {
+                        showingNewFileSheet = true
+                    }
+                }
+
                 Picker("Görünüm", selection: $displayMode) {
                     ForEach(DisplayMode.allCases, id: \.self) { mode in
                         Text(mode.rawValue).tag(mode)
@@ -45,32 +53,42 @@ struct CaseFilesListView: View {
                         emptyState
                     } else {
                         switch displayMode {
-                        case .cards:
+                        case .list:
                             cardsList
                         case .timeline:
-                            CaseFilesTimelineView(coupleId: coupleId, viewModel: viewModel, files: filteredFiles)
+                            CaseFilesTimelineView(
+                                coupleId: coupleId, viewModel: viewModel, files: filteredFiles,
+                                onEdit: { editingFile = $0 }, onDelete: { deletingFile = $0 }
+                            )
                         }
                     }
                 }
                 .animation(.default, value: displayMode)
                 .animation(.default, value: filteredFiles.count)
             }
-            .padding(.top, 12)
         }
-        .navigationTitle("Anı Dosyaları")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    HapticFeedback.tap()
-                    showingNewFileSheet = true
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                }
-            }
-        }
+        .navigationBarHidden(true)
         .sheet(isPresented: $showingNewFileSheet) {
             NewCaseFileSheet(viewModel: viewModel)
+        }
+        .sheet(item: $editingFile) { file in
+            NewCaseFileSheet(viewModel: viewModel, editingFile: file)
+        }
+        .confirmationDialog(
+            "Bu dosyayı silmek istediğine emin misin?",
+            isPresented: Binding(get: { deletingFile != nil }, set: { if !$0 { deletingFile = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("Dosyayı Sil", role: .destructive) {
+                if let deletingFile {
+                    HapticFeedback.tap()
+                    Task { await viewModel.deleteCaseFile(deletingFile) }
+                }
+                self.deletingFile = nil
+            }
+            Button("İptal", role: .cancel) { deletingFile = nil }
+        } message: {
+            Text("İçindeki tüm fotoğraf ve videolar da silinir. Bu işlem geri alınamaz.")
         }
     }
 
@@ -80,9 +98,9 @@ struct CaseFilesListView: View {
                 categoryChip(title: "Tümü", isSelected: selectedCategory == nil) {
                     selectedCategory = nil
                 }
-                ForEach(CaseFileCategory.allCases) { category in
-                    categoryChip(title: category.rawValue, isSelected: selectedCategory == category) {
-                        selectedCategory = category
+                ForEach(viewModel.categories) { category in
+                    categoryChip(title: category.name, isSelected: selectedCategory == category.name) {
+                        selectedCategory = category.name
                     }
                 }
             }
@@ -114,7 +132,7 @@ struct CaseFilesListView: View {
             Text("Henüz dosya yok")
                 .font(.system(.headline, design: .serif))
                 .foregroundStyle(Theme.navy)
-            Text("Sağ üstten yeni bir anı dosyası oluştur.")
+            Text("Sağ üstten yeni bir dosya oluştur.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             Spacer()
@@ -122,20 +140,38 @@ struct CaseFilesListView: View {
     }
 
     private var cardsList: some View {
-        ScrollView {
-            LazyVStack(spacing: 12) {
-                ForEach(filteredFiles) { file in
-                    NavigationLink {
-                        CaseFileDetailView(coupleId: coupleId, viewModel: viewModel, file: file, fileNumber: viewModel.fileNumber(for: file))
+        List {
+            ForEach(filteredFiles) { file in
+                NavigationLink {
+                    CaseFileDetailView(coupleId: coupleId, viewModel: viewModel, file: file, fileNumber: viewModel.fileNumber(for: file))
+                } label: {
+                    CaseFileCardView(file: file, number: viewModel.fileNumber(for: file))
+                }
+                .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                .swipeActions(edge: .leading) {
+                    Button {
+                        HapticFeedback.tap()
+                        editingFile = file
                     } label: {
-                        CaseFileCardView(file: file, number: viewModel.fileNumber(for: file))
+                        Label("Düzenle", systemImage: "pencil")
                     }
-                    .buttonStyle(.plain)
-                    .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
+                    .tint(Theme.navy)
+                }
+                .swipeActions(edge: .trailing) {
+                    Button(role: .destructive) {
+                        HapticFeedback.tap()
+                        deletingFile = file
+                    } label: {
+                        Label("Sil", systemImage: "trash")
+                    }
                 }
             }
-            .padding()
         }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
     }
 }
 
@@ -145,9 +181,13 @@ struct CaseFileCardView: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            Image(systemName: "folder.fill")
-                .font(.title2)
-                .foregroundStyle(Theme.gold)
+            ZStack {
+                Circle()
+                    .fill(Color(hex: file.colorHex))
+                    .frame(width: 44, height: 44)
+                Image(systemName: file.iconName)
+                    .foregroundStyle(.white)
+            }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Dosya No: \(String(format: "%03d", number))")
@@ -182,7 +222,5 @@ struct CaseFileCardView: View {
 }
 
 #Preview {
-    NavigationStack {
-        CaseFilesListView(coupleId: "preview")
-    }
+    CaseFilesListView(coupleId: "preview")
 }

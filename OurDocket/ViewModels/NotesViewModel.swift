@@ -74,6 +74,26 @@ final class NotesViewModel: ObservableObject {
         await save(items: items, listId: list.id)
     }
 
+    func renameList(_ list: NoteList, newTitle: String) async {
+        guard let listId = list.id else { return }
+        let trimmed = newTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        do {
+            try await service.renameList(coupleId: coupleId, listId: listId, newTitle: trimmed)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func deleteList(_ list: NoteList) async {
+        guard let listId = list.id else { return }
+        do {
+            try await service.deleteList(coupleId: coupleId, listId: listId)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     private func save(items: [NoteItem], listId: String?) async {
         guard let listId else { return }
         errorMessage = nil

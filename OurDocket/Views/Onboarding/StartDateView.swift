@@ -49,8 +49,7 @@ struct StartDateView: View {
                     Text("Kaydet")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(Theme.navy)
+                .buttonStyle(.ourDocketPrimary)
                 .padding(.horizontal, 32)
                 .disabled(isSaving)
             }

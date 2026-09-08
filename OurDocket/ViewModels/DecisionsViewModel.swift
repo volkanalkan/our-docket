@@ -1,15 +1,44 @@
 import Foundation
 import FirebaseFirestore
 
+enum DecisionSort: String, CaseIterable, Identifiable {
+    case newestFirst = "Yeniden Eskiye"
+    case oldestFirst = "Eskiden Yeniye"
+    case manual = "Karışık (Elle Sırala)"
+    var id: String { rawValue }
+}
+
 @MainActor
 final class DecisionsViewModel: ObservableObject {
     @Published private(set) var decisions: [Decision] = []
+    @Published var sort: DecisionSort = .newestFirst
     @Published var errorMessage: String?
     @Published private(set) var isSaving = false
 
     private let coupleId: String
     private let service = DecisionsService()
     private var listener: ListenerRegistration?
+
+    /// Dateless decisions always sort to the bottom of date-based orderings
+    /// — there's no "when" to compare them by.
+    var orderedDecisions: [Decision] {
+        switch sort {
+        case .newestFirst:
+            return decisions.sorted { lhs, rhs in
+                guard let l = lhs.date?.dateValue() else { return false }
+                guard let r = rhs.date?.dateValue() else { return true }
+                return l > r
+            }
+        case .oldestFirst:
+            return decisions.sorted { lhs, rhs in
+                guard let l = lhs.date?.dateValue() else { return false }
+                guard let r = rhs.date?.dateValue() else { return true }
+                return l < r
+            }
+        case .manual:
+            return decisions.sorted { $0.sortIndex < $1.sortIndex }
+        }
+    }
 
     init(coupleId: String) {
         self.coupleId = coupleId
@@ -26,35 +55,67 @@ final class DecisionsViewModel: ObservableObject {
         listener?.remove()
     }
 
-    func decisionNumber(for decision: Decision) -> Int {
-        (decisions.firstIndex(where: { $0.id == decision.id }) ?? 0) + 1
-    }
-
     func createDecision(
         title: String,
-        date: Date,
+        date: Date?,
         description: String,
         addToCalendar: Bool,
         reminderEnabled: Bool,
-        reminderLeadTime: Int
+        showElapsedCounter: Bool
     ) async -> Bool {
         errorMessage = nil
         isSaving = true
         defer { isSaving = false }
         do {
             try await service.createDecision(
-                coupleId: coupleId,
-                title: title,
-                date: date,
-                description: description,
-                addToCalendar: addToCalendar,
-                reminderEnabled: reminderEnabled,
-                reminderLeadTime: reminderLeadTime
+                coupleId: coupleId, title: title, date: date, description: description,
+                addToCalendar: addToCalendar, reminderEnabled: reminderEnabled,
+                showElapsedCounter: showElapsedCounter, sortIndex: decisions.count
             )
             return true
         } catch {
             errorMessage = error.localizedDescription
             return false
+        }
+    }
+
+    func updateDecision(
+        _ decision: Decision,
+        title: String,
+        date: Date?,
+        description: String,
+        addToCalendar: Bool,
+        reminderEnabled: Bool,
+        showElapsedCounter: Bool
+    ) async -> Bool {
+        errorMessage = nil
+        isSaving = true
+        defer { isSaving = false }
+        do {
+            try await service.updateDecision(
+                coupleId: coupleId, decision: decision, title: title, date: date, description: description,
+                addToCalendar: addToCalendar, reminderEnabled: reminderEnabled, showElapsedCounter: showElapsedCounter
+            )
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func deleteDecision(_ decision: Decision) async {
+        do {
+            try await service.deleteDecision(coupleId: coupleId, decision: decision)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func move(from source: IndexSet, to destination: Int) {
+        var manualOrder = orderedDecisions
+        manualOrder.move(fromOffsets: source, toOffset: destination)
+        Task {
+            await service.updateSortIndexes(coupleId: coupleId, orderedIds: manualOrder.compactMap(\.id))
         }
     }
 }

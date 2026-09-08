@@ -18,9 +18,13 @@ struct PortraitCropView: View {
     private let frameSize = CGSize(width: 260, height: 260)
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Theme.cream.ignoresSafeArea()
+        ZStack {
+            Theme.cream.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                HeaderBar(title: "Fotoğrafı Ayarla") {
+                    Color.clear.frame(width: 36, height: 36)
+                }
 
                 VStack(spacing: 24) {
                     Spacer()
@@ -66,24 +70,16 @@ struct PortraitCropView: View {
                             }
                             .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Theme.navy)
+                        .buttonStyle(.ourDocketPrimary)
                         .padding(.horizontal, 32)
                         .disabled(isUploading)
                     }
                 }
                 .padding(.bottom, 32)
             }
-            .navigationTitle("Fotoğrafı Ayarla")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { HapticFeedback.tap(); dismiss() }
-                }
-            }
-            .onChange(of: photosPickerItem) { _, newValue in
-                Task { await loadImage(from: newValue) }
-            }
+        }
+        .onChange(of: photosPickerItem) { _, newValue in
+            Task { await loadImage(from: newValue) }
         }
     }
 

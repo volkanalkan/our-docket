@@ -6,15 +6,6 @@ enum MediaType: String, Codable {
     case video
 }
 
-enum CaseFileCategory: String, CaseIterable, Identifiable {
-    case tatil = "Tatil"
-    case ozelGun = "Özel Gün"
-    case gunluk = "Günlük"
-    case diger = "Diğer"
-
-    var id: String { rawValue }
-}
-
 struct MediaItem: Codable, Identifiable {
     var id: String { storagePath }
     var storagePath: String
@@ -31,4 +22,22 @@ struct CaseFile: Codable, Identifiable {
     @ServerTimestamp var createdAt: Timestamp?
     var category: String
     var mediaItems: [MediaItem]
+    var iconName: String
+    var colorHex: String
+    /// Both nil means "no date" (sorts to the bottom of the timeline).
+    /// eventEndDate equal to eventStartDate represents a single day;
+    /// a later eventEndDate represents a range (e.g. a week-long trip).
+    var eventStartDate: Timestamp?
+    var eventEndDate: Timestamp?
+}
+
+/// A couple's case-file categories are editable, but every couple starts
+/// with the same native defaults — stored per-couple in Firestore rather
+/// than hardcoded, so editing one couple's list can't affect anyone else's.
+struct CaseFileCategoryOption: Codable, Identifiable {
+    @DocumentID var id: String?
+    var name: String
+    @ServerTimestamp var createdAt: Timestamp?
+
+    static let defaultNames = ["Tatil", "Özel Gün", "Günlük", "Diğer"]
 }

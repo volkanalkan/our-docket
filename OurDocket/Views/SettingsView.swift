@@ -8,57 +8,65 @@ struct SettingsView: View {
     @State private var isDeleting = false
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    Button("Çıkış Yap", role: .destructive) {
+        ZStack {
+            Theme.cream.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                HeaderBar(title: "Ayarlar", showBack: false) {
+                    HeaderIconButton(systemImage: "xmark") { dismiss() }
+                }
+
+                VStack(spacing: 20) {
+                    Button("Çıkış Yap") {
                         HapticFeedback.tap()
                         authViewModel.signOut()
                         dismiss()
                     }
-                }
+                    .buttonStyle(.ourDocketSecondary)
 
-                Section {
-                    Button("Hesabı Sil", role: .destructive) {
-                        showingDeleteConfirmation = true
-                    }
-                    .disabled(isDeleting)
-                } footer: {
-                    Text("Hesabını sildiğinde giriş bilgilerin kalıcı olarak kaldırılır. Paylaştığın anılar, notlar ve kararlar partnerinin hesabında kalmaya devam eder.")
-                }
-
-                if let error = authViewModel.errorMessage {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .font(.footnote)
-                }
-            }
-            .navigationTitle("Ayarlar")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Kapat") { dismiss() }
-                }
-            }
-            .confirmationDialog(
-                "Hesabını silmek istediğine emin misin?",
-                isPresented: $showingDeleteConfirmation,
-                titleVisibility: .visible
-            ) {
-                Button("Hesabı Sil", role: .destructive) {
-                    Task {
-                        isDeleting = true
-                        await authViewModel.deleteAccount()
-                        isDeleting = false
-                        if authViewModel.errorMessage == nil {
-                            HapticFeedback.success()
+                    VStack(spacing: 8) {
+                        Button("Hesabı Sil") {
+                            showingDeleteConfirmation = true
                         }
+                        .buttonStyle(.ourDocketDestructive)
+                        .disabled(isDeleting)
+
+                        Text("Hesabını sildiğinde giriş bilgilerin kalıcı olarak kaldırılır. Paylaştığın anılar, notlar ve kararlar partnerinin hesabında kalmaya devam eder.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding(.top, 24)
+
+                    if let error = authViewModel.errorMessage {
+                        Text(error)
+                            .foregroundStyle(.red)
+                            .font(.footnote)
+                    }
+
+                    Spacer()
+                }
+                .padding()
+            }
+        }
+        .confirmationDialog(
+            "Hesabını silmek istediğine emin misin?",
+            isPresented: $showingDeleteConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Hesabı Sil", role: .destructive) {
+                Task {
+                    isDeleting = true
+                    await authViewModel.deleteAccount()
+                    isDeleting = false
+                    if authViewModel.errorMessage == nil {
+                        HapticFeedback.success()
                     }
                 }
-                Button("İptal", role: .cancel) {}
-            } message: {
-                Text("Bu işlem geri alınamaz.")
             }
+            Button("İptal", role: .cancel) {}
+        } message: {
+            Text("Bu işlem geri alınamaz.")
         }
     }
 }

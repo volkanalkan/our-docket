@@ -7,6 +7,9 @@ struct NotesView: View {
     @State private var selectedListId: String?
     @State private var showingNewListAlert = false
     @State private var newListTitle = ""
+    @State private var renamingList: NoteList?
+    @State private var renameText = ""
+    @State private var deletingList: NoteList?
 
     init(coupleId: String) {
         self.coupleId = coupleId
@@ -22,6 +25,13 @@ struct NotesView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 12) {
+                HeaderBar(title: "Notlar") {
+                    HeaderIconButton(systemImage: "plus") {
+                        newListTitle = ""
+                        showingNewListAlert = true
+                    }
+                }
+
                 if !viewModel.lists.isEmpty {
                     tabBar
                 }
@@ -43,21 +53,8 @@ struct NotesView: View {
                 }
             }
             .animation(.default, value: selectedList?.id)
-            .padding(.top, 12)
         }
-        .navigationTitle("Notlar")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    HapticFeedback.tap()
-                    newListTitle = ""
-                    showingNewListAlert = true
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                }
-            }
-        }
+        .navigationBarHidden(true)
         .alert("Yeni Sekme", isPresented: $showingNewListAlert) {
             TextField("örn. Market Alışverişi", text: $newListTitle)
             Button("İptal", role: .cancel) {}
@@ -65,6 +62,32 @@ struct NotesView: View {
                 HapticFeedback.tap()
                 Task { await viewModel.createList(title: newListTitle) }
             }
+        }
+        .alert("Sekmeyi Yeniden Adlandır", isPresented: Binding(get: { renamingList != nil }, set: { if !$0 { renamingList = nil } })) {
+            TextField("Sekme adı", text: $renameText)
+            Button("İptal", role: .cancel) { renamingList = nil }
+            Button("Kaydet") {
+                if let renamingList {
+                    Task { await viewModel.renameList(renamingList, newTitle: renameText) }
+                }
+                renamingList = nil
+            }
+        }
+        .confirmationDialog(
+            "Bu sekmeyi silmek istediğine emin misin?",
+            isPresented: Binding(get: { deletingList != nil }, set: { if !$0 { deletingList = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("Sekmeyi Sil", role: .destructive) {
+                if let deletingList {
+                    HapticFeedback.tap()
+                    Task { await viewModel.deleteList(deletingList) }
+                }
+                deletingList = nil
+            }
+            Button("İptal", role: .cancel) { deletingList = nil }
+        } message: {
+            Text("İçindeki tüm maddeler de silinir.")
         }
     }
 
@@ -85,6 +108,19 @@ struct NotesView: View {
                             .foregroundStyle(isSelected ? .white : Theme.navy)
                             .clipShape(Capsule())
                     }
+                    .contextMenu {
+                        Button {
+                            renamingList = list
+                            renameText = list.title
+                        } label: {
+                            Label("Yeniden Adlandır", systemImage: "pencil")
+                        }
+                        Button(role: .destructive) {
+                            deletingList = list
+                        } label: {
+                            Label("Sil", systemImage: "trash")
+                        }
+                    }
                 }
             }
             .padding(.horizontal)
@@ -93,7 +129,5 @@ struct NotesView: View {
 }
 
 #Preview {
-    NavigationStack {
-        NotesView(coupleId: "preview")
-    }
+    NotesView(coupleId: "preview")
 }

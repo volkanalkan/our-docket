@@ -10,9 +10,9 @@ struct ShortcutCardsView: View {
     let coupleId: String
 
     private let cards: [ShortcutCard] = [
-        ShortcutCard(title: "Anı Dosyaları", systemImage: "folder.fill"),
+        ShortcutCard(title: "Arşiv", systemImage: "folder.fill"),
         ShortcutCard(title: "Notlar", systemImage: "checklist"),
-        ShortcutCard(title: "Kararlar", systemImage: "seal.fill")
+        ShortcutCard(title: "Dönüm Noktaları", systemImage: "seal.fill")
     ]
 
     var body: some View {
@@ -37,38 +37,16 @@ struct ShortcutCardsView: View {
         }
         .navigationDestination(for: ShortcutCard.self) { card in
             switch card.title {
-            case "Anı Dosyaları":
+            case "Arşiv":
                 CaseFilesListView(coupleId: coupleId)
             case "Notlar":
                 NotesView(coupleId: coupleId)
-            case "Kararlar":
+            case "Dönüm Noktaları":
                 DecisionsListView(coupleId: coupleId)
             default:
-                ComingSoonView(title: card.title)
+                EmptyView()
             }
         }
-    }
-}
-
-struct ComingSoonView: View {
-    let title: String
-
-    var body: some View {
-        ZStack {
-            Theme.cream.ignoresSafeArea()
-            VStack(spacing: 12) {
-                Image(systemName: "hourglass")
-                    .font(.system(size: 40))
-                    .foregroundStyle(Theme.gold)
-                Text(title)
-                    .font(.system(.title2, design: .serif, weight: .bold))
-                    .foregroundStyle(Theme.navy)
-                Text("Yakında burada olacak.")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

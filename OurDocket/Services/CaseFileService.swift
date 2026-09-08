@@ -28,11 +28,90 @@ final class CaseFileService {
         Firestore.firestore().collection("couples").document(coupleId).collection("caseFiles")
     }
 
-    func createCaseFile(coupleId: String, title: String, category: String, createdBy: String) async throws -> String {
-        let newFile = CaseFile(title: title, createdBy: createdBy, category: category, mediaItems: [])
+    private func categoriesCollection(coupleId: String) -> CollectionReference {
+        Firestore.firestore().collection("couples").document(coupleId).collection("caseFileCategories")
+    }
+
+    func createCaseFile(
+        coupleId: String,
+        title: String,
+        category: String,
+        createdBy: String,
+        iconName: String,
+        colorHex: String,
+        eventStartDate: Date?,
+        eventEndDate: Date?
+    ) async throws -> String {
+        let newFile = CaseFile(
+            title: title,
+            createdBy: createdBy,
+            category: category,
+            mediaItems: [],
+            iconName: iconName,
+            colorHex: colorHex,
+            eventStartDate: eventStartDate.map(Timestamp.init(date:)),
+            eventEndDate: eventEndDate.map(Timestamp.init(date:))
+        )
         let ref = caseFilesCollection(coupleId: coupleId).document()
         try await ref.setData(from: newFile)
         return ref.documentID
+    }
+
+    func updateCaseFile(
+        coupleId: String,
+        fileId: String,
+        title: String,
+        category: String,
+        iconName: String,
+        colorHex: String,
+        eventStartDate: Date?,
+        eventEndDate: Date?
+    ) async throws {
+        try await caseFilesCollection(coupleId: coupleId).document(fileId).updateData([
+            "title": title,
+            "category": category,
+            "iconName": iconName,
+            "colorHex": colorHex,
+            "eventStartDate": eventStartDate.map(Timestamp.init(date:)) as Any,
+            "eventEndDate": eventEndDate.map(Timestamp.init(date:)) as Any
+        ])
+    }
+
+    func deleteCaseFile(coupleId: String, fileId: String) async throws {
+        try await caseFilesCollection(coupleId: coupleId).document(fileId).delete()
+    }
+
+    func deleteMedia(_ item: MediaItem, coupleId: String, fileId: String) async throws {
+        let encoded = try Firestore.Encoder().encode(item)
+        try await caseFilesCollection(coupleId: coupleId).document(fileId)
+            .updateData(["mediaItems": FieldValue.arrayRemove([encoded])])
+        try? await storage.reference(withPath: item.storagePath).delete()
+        try? await storage.reference(withPath: item.thumbnailPath).delete()
+    }
+
+    // MARK: - Categories
+
+    func ensureDefaultCategories(coupleId: String) async throws {
+        let snapshot = try await categoriesCollection(coupleId: coupleId).limit(to: 1).getDocuments()
+        guard snapshot.documents.isEmpty else { return }
+        for name in CaseFileCategoryOption.defaultNames {
+            try await createCategory(coupleId: coupleId, name: name)
+        }
+    }
+
+    @discardableResult
+    func createCategory(coupleId: String, name: String) async throws -> String {
+        let ref = categoriesCollection(coupleId: coupleId).document()
+        try await ref.setData(from: CaseFileCategoryOption(name: name))
+        return ref.documentID
+    }
+
+    func renameCategory(coupleId: String, categoryId: String, newName: String) async throws {
+        try await categoriesCollection(coupleId: coupleId).document(categoryId).updateData(["name": newName])
+    }
+
+    func deleteCategory(coupleId: String, categoryId: String) async throws {
+        try await categoriesCollection(coupleId: coupleId).document(categoryId).delete()
     }
 
     /// Uploads the original file untouched (per the app's zero-quality-loss

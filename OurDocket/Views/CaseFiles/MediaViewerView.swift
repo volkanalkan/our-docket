@@ -4,6 +4,7 @@ import AVKit
 struct MediaViewerView: View {
     let item: MediaItem
     let viewModel: CaseFilesViewModel
+    var onDelete: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var url: URL?
@@ -28,7 +29,18 @@ struct MediaViewerView: View {
 
             VStack {
                 HStack {
+                    Button {
+                        HapticFeedback.tap()
+                        onDelete()
+                    } label: {
+                        Image(systemName: "trash.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(.white)
+                    }
+                    .padding()
+
                     Spacer()
+
                     Button {
                         HapticFeedback.tap()
                         dismiss()

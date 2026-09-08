@@ -72,8 +72,7 @@ struct PairingView: View {
                 Label("Davet Kodu Oluştur", systemImage: "person.badge.plus")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(Theme.navy)
+            .buttonStyle(.ourDocketPrimary)
 
             Button {
                 HapticFeedback.tap()
@@ -83,8 +82,7 @@ struct PairingView: View {
                 Label("Davet Kodu Gir", systemImage: "number")
                     .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.bordered)
-            .tint(Theme.navy)
+            .buttonStyle(.ourDocketSecondary)
         }
         .disabled(isBusy)
     }
@@ -137,8 +135,7 @@ struct PairingView: View {
                 Text("Eşleş")
                     .frame(maxWidth: 200)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(Theme.navy)
+            .buttonStyle(.ourDocketPrimary)
             .disabled(enteredCode.count != 6 || isBusy)
 
             Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }

@@ -4,10 +4,18 @@ import FirebaseFirestore
 struct Decision: Codable, Identifiable {
     @DocumentID var id: String?
     var title: String
-    var date: Timestamp
+    /// nil means the date is deliberately unknown/unset. Calendar and
+    /// reminder options only make sense when this is set.
+    var date: Timestamp?
     var description: String
     var addToCalendar: Bool
     var reminderEnabled: Bool
-    var reminderLeadTime: Int
+    var showElapsedCounter: Bool
+    /// EKEvent identifier for the calendar entry this decision created, so
+    /// turning "Calendar'a ekle" off can find and remove the exact event.
+    var calendarEventIdentifier: String?
+    /// Manual order used only when the list's sort mode is "random/manual
+    /// drag" — every other sort mode is computed from `date`/`createdAt`.
+    var sortIndex: Int
     @ServerTimestamp var createdAt: Timestamp?
 }

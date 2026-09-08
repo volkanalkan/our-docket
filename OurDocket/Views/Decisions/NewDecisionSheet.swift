@@ -2,66 +2,159 @@ import SwiftUI
 
 struct NewDecisionSheet: View {
     @ObservedObject var viewModel: DecisionsViewModel
+    var editingDecision: Decision?
+
     @Environment(\.dismiss) private var dismiss
 
     @State private var title = ""
-    @State private var date = Date()
     @State private var description = ""
+    @State private var hasDate = true
+    @State private var date = Date()
     @State private var addToCalendar = false
     @State private var reminderEnabled = false
-    @State private var reminderLeadTime = 1
+    @State private var showElapsedCounter = false
+    @State private var showingReminderInfo = false
+    @State private var showingCalendarRemovalConfirmation = false
+    @State private var wasAddedToCalendarInitially = false
+
+    private var isEditing: Bool { editingDecision != nil }
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section("Karar") {
-                    TextField("Başlık, örn. İlk \"Seni Seviyorum\"", text: $title)
-                    DatePicker("Tarih", selection: $date, displayedComponents: .date)
-                    TextField("Açıklama", text: $description, axis: .vertical)
-                        .lineLimit(3...6)
+        ZStack {
+            Theme.cream.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                HeaderBar(title: isEditing ? "Düzenle" : "Yeni Dönüm Noktası") {
+                    HeaderIconButton(systemImage: "xmark") { dismiss() }
                 }
 
-                Section {
-                    Toggle("Apple Calendar'a ekle", isOn: $addToCalendar.animation())
-                        .onChange(of: addToCalendar) { _, _ in HapticFeedback.selection() }
-                    Toggle("Bildirim gönder", isOn: $reminderEnabled.animation())
-                        .onChange(of: reminderEnabled) { _, _ in HapticFeedback.selection() }
-                    if reminderEnabled {
-                        Stepper("Kaç gün önce: \(reminderLeadTime)", value: $reminderLeadTime, in: 1...30)
-                            .onChange(of: reminderLeadTime) { _, _ in HapticFeedback.tap() }
-                    }
-                }
+                ScrollView {
+                    VStack(spacing: 20) {
+                        fieldBlock(label: "Başlık") {
+                            TextField("örn. İlk \"Seni Seviyorum\"", text: $title)
+                                .padding(12)
+                                .background(.white.opacity(0.7))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
 
-                if let error = viewModel.errorMessage {
-                    Text(error).foregroundStyle(.red).font(.footnote)
-                }
-            }
-            .navigationTitle("Yeni Karar")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { HapticFeedback.tap(); dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Oluştur") {
-                        HapticFeedback.tap()
-                        Task { await createDecision() }
+                        fieldBlock(label: "Açıklama") {
+                            TextField("Açıklama (opsiyonel)", text: $description, axis: .vertical)
+                                .lineLimit(3...6)
+                                .padding(12)
+                                .background(.white.opacity(0.7))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+
+                        VStack(spacing: 12) {
+                            Toggle("Bir tarih belirt", isOn: $hasDate.animation())
+
+                            if hasDate {
+                                DatePicker("Tarih", selection: $date, displayedComponents: .date)
+
+                                Toggle("Apple Calendar'a ekle", isOn: $addToCalendar)
+                                    .onChange(of: addToCalendar) { _, newValue in
+                                        handleCalendarToggle(newValue)
+                                    }
+
+                                HStack {
+                                    Toggle("Bildirim gönder", isOn: $reminderEnabled)
+                                    Button {
+                                        showingReminderInfo = true
+                                    } label: {
+                                        Image(systemName: "info.circle")
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .popover(isPresented: $showingReminderInfo) {
+                                        Text("1 hafta önce (1 hafta kaldı) ve tarihin kendisinde (bugün) olmak üzere, her yıl saat 00:00'da bildirim gönderilir.")
+                                            .font(.footnote)
+                                            .padding()
+                                            .frame(maxWidth: 260)
+                                            .presentationCompactAdaptation(.popover)
+                                    }
+                                }
+
+                                Toggle("Geçen süre sayacını göster", isOn: $showElapsedCounter)
+                            }
+                        }
+                        .padding(12)
+                        .background(.white.opacity(0.7))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                        if let error = viewModel.errorMessage {
+                            Text(error).foregroundStyle(.red).font(.footnote)
+                        }
+
+                        Button(isEditing ? "Kaydet" : "Oluştur") {
+                            HapticFeedback.tap()
+                            Task { await save() }
+                        }
+                        .buttonStyle(.ourDocketPrimary)
+                        .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || viewModel.isSaving)
                     }
-                    .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || viewModel.isSaving)
+                    .padding()
                 }
             }
         }
+        .confirmationDialog(
+            "Calendar'dan silinecek, emin misin?",
+            isPresented: $showingCalendarRemovalConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Evet, Kaldır", role: .destructive) {
+                addToCalendar = false
+            }
+            Button("Vazgeç", role: .cancel) {
+                addToCalendar = true
+            }
+        }
+        .onAppear(perform: setUpInitialState)
     }
 
-    private func createDecision() async {
-        let success = await viewModel.createDecision(
-            title: title,
-            date: date,
-            description: description,
-            addToCalendar: addToCalendar,
-            reminderEnabled: reminderEnabled,
-            reminderLeadTime: reminderLeadTime
-        )
+    private func fieldBlock<Content: View>(label: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(label)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.secondary)
+            content()
+        }
+    }
+
+    private func handleCalendarToggle(_ newValue: Bool) {
+        guard isEditing, wasAddedToCalendarInitially, !newValue else { return }
+        showingCalendarRemovalConfirmation = true
+    }
+
+    private func setUpInitialState() {
+        guard let editingDecision, title.isEmpty else { return }
+        title = editingDecision.title
+        description = editingDecision.description
+        if let existingDate = editingDecision.date?.dateValue() {
+            hasDate = true
+            date = existingDate
+        } else {
+            hasDate = false
+        }
+        addToCalendar = editingDecision.addToCalendar
+        wasAddedToCalendarInitially = editingDecision.addToCalendar
+        reminderEnabled = editingDecision.reminderEnabled
+        showElapsedCounter = editingDecision.showElapsedCounter
+    }
+
+    private func save() async {
+        let resolvedDate = hasDate ? date : nil
+        let success: Bool
+        if let editingDecision {
+            success = await viewModel.updateDecision(
+                editingDecision, title: title, date: resolvedDate, description: description,
+                addToCalendar: addToCalendar, reminderEnabled: reminderEnabled, showElapsedCounter: showElapsedCounter
+            )
+        } else {
+            success = await viewModel.createDecision(
+                title: title, date: resolvedDate, description: description,
+                addToCalendar: addToCalendar, reminderEnabled: reminderEnabled, showElapsedCounter: showElapsedCounter
+            )
+        }
+
         if success {
             HapticFeedback.success()
             dismiss()

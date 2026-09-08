@@ -8,8 +8,23 @@ struct NoteListDetailView: View {
     @State private var newItemText = ""
     @State private var editingItem: NoteItem?
     @State private var editText = ""
+    @FocusState private var isInputFocused: Bool
 
     var body: some View {
+        ZStack {
+            // Sits behind everything else, so only taps that miss every
+            // other control (rows, buttons, the text field) reach it —
+            // exactly the "tap empty space to dismiss the keyboard" gap
+            // that was missing before (only the submit arrow dismissed it).
+            Color.clear
+                .contentShape(Rectangle())
+                .onTapGesture { isInputFocused = false }
+
+            content
+        }
+    }
+
+    private var content: some View {
         VStack(spacing: 0) {
             if list.items.isEmpty {
                 Spacer()
@@ -60,11 +75,13 @@ struct NoteListDetailView: View {
                 }
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
+                .scrollDismissesKeyboard(.immediately)
             }
 
             HStack(spacing: 8) {
                 TextField("Yeni madde ekle", text: $newItemText)
                     .textFieldStyle(.roundedBorder)
+                    .focused($isInputFocused)
                     .onSubmit { Task { await addItem() } }
 
                 Button {

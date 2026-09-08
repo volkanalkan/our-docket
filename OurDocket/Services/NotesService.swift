@@ -24,4 +24,12 @@ final class NotesService {
         let encoded = try items.map { try Firestore.Encoder().encode($0) }
         try await noteListsCollection(coupleId: coupleId).document(listId).updateData(["items": encoded])
     }
+
+    func renameList(coupleId: String, listId: String, newTitle: String) async throws {
+        try await noteListsCollection(coupleId: coupleId).document(listId).updateData(["title": newTitle])
+    }
+
+    func deleteList(coupleId: String, listId: String) async throws {
+        try await noteListsCollection(coupleId: coupleId).document(listId).delete()
+    }
 }

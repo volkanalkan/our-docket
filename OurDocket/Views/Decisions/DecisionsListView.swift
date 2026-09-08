@@ -5,6 +5,8 @@ struct DecisionsListView: View {
 
     @StateObject private var viewModel: DecisionsViewModel
     @State private var showingNewSheet = false
+    @State private var editingDecision: Decision?
+    @State private var deletingDecision: Decision?
 
     init(coupleId: String) {
         self.coupleId = coupleId
@@ -15,36 +17,102 @@ struct DecisionsListView: View {
         ZStack {
             Theme.cream.ignoresSafeArea()
 
-            if viewModel.decisions.isEmpty {
-                emptyState
-            } else {
-                ScrollView {
-                    LazyVStack(spacing: 14) {
-                        ForEach(viewModel.decisions) { decision in
-                            DecisionCardView(decision: decision, number: viewModel.decisionNumber(for: decision))
-                                .transition(.opacity.combined(with: .move(edge: .top)))
-                        }
+            VStack(spacing: 0) {
+                HeaderBar(title: "Dönüm Noktaları") {
+                    HStack(spacing: 8) {
+                        sortMenu
+                        HeaderIconButton(systemImage: "plus") { showingNewSheet = true }
                     }
-                    .padding()
+                }
+
+                if viewModel.decisions.isEmpty {
+                    emptyState
+                } else {
+                    list
                 }
             }
         }
+        .navigationBarHidden(true)
         .animation(.default, value: viewModel.decisions.count)
-        .navigationTitle("Kararlar")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    HapticFeedback.tap()
-                    showingNewSheet = true
-                } label: {
-                    Image(systemName: "plus.circle.fill")
-                }
-            }
-        }
         .sheet(isPresented: $showingNewSheet) {
             NewDecisionSheet(viewModel: viewModel)
         }
+        .sheet(item: $editingDecision) { decision in
+            NewDecisionSheet(viewModel: viewModel, editingDecision: decision)
+        }
+        .confirmationDialog(
+            "Bu dönüm noktasını silmek istediğine emin misin?",
+            isPresented: Binding(get: { deletingDecision != nil }, set: { if !$0 { deletingDecision = nil } }),
+            titleVisibility: .visible
+        ) {
+            Button("Sil", role: .destructive) {
+                if let deletingDecision {
+                    HapticFeedback.tap()
+                    Task { await viewModel.deleteDecision(deletingDecision) }
+                }
+                deletingDecision = nil
+            }
+            Button("İptal", role: .cancel) { deletingDecision = nil }
+        }
+    }
+
+    private var sortMenu: some View {
+        Menu {
+            ForEach(DecisionSort.allCases) { option in
+                Button {
+                    HapticFeedback.selection()
+                    viewModel.sort = option
+                } label: {
+                    Label(option.rawValue, systemImage: viewModel.sort == option ? "checkmark" : "")
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Theme.navy)
+                .frame(width: 36, height: 36)
+                .background(Theme.navy.opacity(0.08), in: Circle())
+        }
+    }
+
+    private var list: some View {
+        List {
+            ForEach(viewModel.orderedDecisions) { decision in
+                DecisionCardView(decision: decision)
+                    .onTapGesture {
+                        HapticFeedback.tap()
+                        editingDecision = decision
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
+                    .deleteDisabled(true)
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            HapticFeedback.tap()
+                            editingDecision = decision
+                        } label: {
+                            Label("Düzenle", systemImage: "pencil")
+                        }
+                        .tint(Theme.navy)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            HapticFeedback.tap()
+                            deletingDecision = decision
+                        } label: {
+                            Label("Sil", systemImage: "trash")
+                        }
+                    }
+            }
+            .onMove { source, destination in
+                guard viewModel.sort == .manual else { return }
+                viewModel.move(from: source, to: destination)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .environment(\.editMode, .constant(viewModel.sort == .manual ? .active : .inactive))
     }
 
     private var emptyState: some View {
@@ -53,10 +121,10 @@ struct DecisionsListView: View {
             Image(systemName: "seal")
                 .font(.system(size: 40))
                 .foregroundStyle(Theme.gold)
-            Text("Henüz karar yok")
+            Text("Henüz bir şey yok")
                 .font(.system(.headline, design: .serif))
                 .foregroundStyle(Theme.navy)
-            Text("Sağ üstten yeni bir karar ekle.")
+            Text("Sağ üstten yeni bir dönüm noktası ekle.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             Spacer()
@@ -65,7 +133,5 @@ struct DecisionsListView: View {
 }
 
 #Preview {
-    NavigationStack {
-        DecisionsListView(coupleId: "preview")
-    }
+    DecisionsListView(coupleId: "preview")
 }
