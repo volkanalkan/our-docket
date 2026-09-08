@@ -58,6 +58,7 @@ final class DecisionsViewModel: ObservableObject {
     func createDecision(
         title: String,
         date: Date?,
+        endDate: Date?,
         description: String,
         addToCalendar: Bool,
         reminderEnabled: Bool,
@@ -68,7 +69,7 @@ final class DecisionsViewModel: ObservableObject {
         defer { isSaving = false }
         do {
             try await service.createDecision(
-                coupleId: coupleId, title: title, date: date, description: description,
+                coupleId: coupleId, title: title, date: date, endDate: endDate, description: description,
                 addToCalendar: addToCalendar, reminderEnabled: reminderEnabled,
                 showElapsedCounter: showElapsedCounter, sortIndex: decisions.count
             )
@@ -83,6 +84,7 @@ final class DecisionsViewModel: ObservableObject {
         _ decision: Decision,
         title: String,
         date: Date?,
+        endDate: Date?,
         description: String,
         addToCalendar: Bool,
         reminderEnabled: Bool,
@@ -93,7 +95,7 @@ final class DecisionsViewModel: ObservableObject {
         defer { isSaving = false }
         do {
             try await service.updateDecision(
-                coupleId: coupleId, decision: decision, title: title, date: date, description: description,
+                coupleId: coupleId, decision: decision, title: title, date: date, endDate: endDate, description: description,
                 addToCalendar: addToCalendar, reminderEnabled: reminderEnabled, showElapsedCounter: showElapsedCounter
             )
             return true

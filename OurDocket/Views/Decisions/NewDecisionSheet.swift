@@ -10,6 +10,8 @@ struct NewDecisionSheet: View {
     @State private var description = ""
     @State private var hasDate = true
     @State private var date = Date()
+    @State private var isRange = false
+    @State private var endDate = Date()
     @State private var addToCalendar = false
     @State private var reminderEnabled = false
     @State private var showElapsedCounter = false
@@ -49,7 +51,12 @@ struct NewDecisionSheet: View {
                             Toggle("Bir tarih belirt", isOn: $hasDate.animation())
 
                             if hasDate {
-                                DatePicker("Tarih", selection: $date, displayedComponents: .date)
+                                DatePicker(isRange ? "Başlangıç" : "Tarih", selection: $date, displayedComponents: .date)
+
+                                Toggle("Bir tarih aralığı", isOn: $isRange.animation())
+                                if isRange {
+                                    DatePicker("Bitiş", selection: $endDate, in: date..., displayedComponents: .date)
+                                }
 
                                 Toggle("Apple Calendar'a ekle", isOn: $addToCalendar)
                                     .onChange(of: addToCalendar) { _, newValue in
@@ -57,7 +64,6 @@ struct NewDecisionSheet: View {
                                     }
 
                                 HStack {
-                                    Toggle("Bildirim gönder", isOn: $reminderEnabled)
                                     Button {
                                         showingReminderInfo = true
                                     } label: {
@@ -68,9 +74,11 @@ struct NewDecisionSheet: View {
                                         Text("1 hafta önce (1 hafta kaldı) ve tarihin kendisinde (bugün) olmak üzere, her yıl saat 00:00'da bildirim gönderilir.")
                                             .font(.footnote)
                                             .padding()
-                                            .frame(maxWidth: 260)
+                                            .frame(maxWidth: 280)
+                                            .fixedSize(horizontal: false, vertical: true)
                                             .presentationCompactAdaptation(.popover)
                                     }
+                                    Toggle("Bildirim gönder", isOn: $reminderEnabled)
                                 }
 
                                 Toggle("Geçen süre sayacını göster", isOn: $showElapsedCounter)
@@ -131,6 +139,10 @@ struct NewDecisionSheet: View {
         if let existingDate = editingDecision.date?.dateValue() {
             hasDate = true
             date = existingDate
+            if let existingEnd = editingDecision.endDate?.dateValue(), existingEnd > existingDate {
+                isRange = true
+                endDate = existingEnd
+            }
         } else {
             hasDate = false
         }
@@ -142,15 +154,16 @@ struct NewDecisionSheet: View {
 
     private func save() async {
         let resolvedDate = hasDate ? date : nil
+        let resolvedEndDate = hasDate && isRange ? endDate : nil
         let success: Bool
         if let editingDecision {
             success = await viewModel.updateDecision(
-                editingDecision, title: title, date: resolvedDate, description: description,
+                editingDecision, title: title, date: resolvedDate, endDate: resolvedEndDate, description: description,
                 addToCalendar: addToCalendar, reminderEnabled: reminderEnabled, showElapsedCounter: showElapsedCounter
             )
         } else {
             success = await viewModel.createDecision(
-                title: title, date: resolvedDate, description: description,
+                title: title, date: resolvedDate, endDate: resolvedEndDate, description: description,
                 addToCalendar: addToCalendar, reminderEnabled: reminderEnabled, showElapsedCounter: showElapsedCounter
             )
         }

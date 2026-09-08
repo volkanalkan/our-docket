@@ -96,31 +96,38 @@ struct NotesView: View {
             HStack(spacing: 8) {
                 ForEach(viewModel.lists) { list in
                     let isSelected = selectedList?.id == list.id
-                    Button {
-                        HapticFeedback.selection()
-                        selectedListId = list.id
-                    } label: {
-                        Text(list.title)
-                            .font(.footnote.weight(.medium))
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 8)
-                            .background(isSelected ? Theme.navy : Theme.navy.opacity(0.08))
-                            .foregroundStyle(isSelected ? .white : Theme.navy)
-                            .clipShape(Capsule())
-                    }
-                    .contextMenu {
+                    HStack(spacing: 6) {
                         Button {
-                            renamingList = list
-                            renameText = list.title
+                            HapticFeedback.selection()
+                            selectedListId = list.id
                         } label: {
-                            Label("Yeniden Adlandır", systemImage: "pencil")
+                            Text(list.title)
+                                .font(.footnote.weight(.medium))
                         }
-                        Button(role: .destructive) {
-                            deletingList = list
+                        .buttonStyle(.plain)
+
+                        Menu {
+                            Button {
+                                renamingList = list
+                                renameText = list.title
+                            } label: {
+                                Label("Yeniden Adlandır", systemImage: "pencil")
+                            }
+                            Button(role: .destructive) {
+                                deletingList = list
+                            } label: {
+                                Label("Sil", systemImage: "trash")
+                            }
                         } label: {
-                            Label("Sil", systemImage: "trash")
+                            Image(systemName: "ellipsis")
+                                .font(.caption2.weight(.bold))
                         }
                     }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(isSelected ? Theme.navy : Theme.navy.opacity(0.08))
+                    .foregroundStyle(isSelected ? .white : Theme.navy)
+                    .clipShape(Capsule())
                 }
             }
             .padding(.horizontal)

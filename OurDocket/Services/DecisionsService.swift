@@ -15,6 +15,7 @@ final class DecisionsService {
         coupleId: String,
         title: String,
         date: Date?,
+        endDate: Date?,
         description: String,
         addToCalendar: Bool,
         reminderEnabled: Bool,
@@ -23,7 +24,7 @@ final class DecisionsService {
     ) async throws {
         var calendarEventIdentifier: String?
         if let date, addToCalendar {
-            calendarEventIdentifier = try? await addCalendarEvent(title: title, date: date, notes: description)
+            calendarEventIdentifier = try? await addCalendarEvent(title: title, startDate: date, endDate: endDate, notes: description)
         }
 
         let ref = decisionsCollection(coupleId: coupleId).document()
@@ -35,6 +36,7 @@ final class DecisionsService {
         let decision = Decision(
             title: title,
             date: date.map(Timestamp.init(date:)),
+            endDate: date != nil ? endDate.map(Timestamp.init(date:)) : nil,
             description: description,
             addToCalendar: date != nil && addToCalendar,
             reminderEnabled: date != nil && reminderEnabled,
@@ -50,6 +52,7 @@ final class DecisionsService {
         decision: Decision,
         title: String,
         date: Date?,
+        endDate: Date?,
         description: String,
         addToCalendar: Bool,
         reminderEnabled: Bool,
@@ -67,7 +70,7 @@ final class DecisionsService {
             if let existingId = calendarEventIdentifier {
                 removeCalendarEvent(identifier: existingId)
             }
-            calendarEventIdentifier = try? await addCalendarEvent(title: title, date: date, notes: description)
+            calendarEventIdentifier = try? await addCalendarEvent(title: title, startDate: date, endDate: endDate, notes: description)
         }
 
         cancelReminders(id: decisionId)
@@ -78,6 +81,7 @@ final class DecisionsService {
         try await decisionsCollection(coupleId: coupleId).document(decisionId).updateData([
             "title": title,
             "date": date.map(Timestamp.init(date:)) as Any,
+            "endDate": (date != nil ? endDate.map(Timestamp.init(date:)) : nil) as Any,
             "description": description,
             "addToCalendar": wantsCalendar,
             "reminderEnabled": date != nil && reminderEnabled,
@@ -105,15 +109,20 @@ final class DecisionsService {
 
     // MARK: - Calendar
 
-    private func addCalendarEvent(title: String, date: Date, notes: String) async throws -> String? {
+    private func addCalendarEvent(title: String, startDate: Date, endDate: Date?, notes: String) async throws -> String? {
         let granted = try await eventStore.requestWriteOnlyAccessToEvents()
         guard granted else { return nil }
 
         let event = EKEvent(eventStore: eventStore)
         event.title = title
         event.notes = notes
-        event.startDate = date
-        event.endDate = date.addingTimeInterval(3600)
+        event.startDate = startDate
+        if let endDate, !Calendar.current.isDate(endDate, inSameDayAs: startDate) {
+            event.isAllDay = true
+            event.endDate = endDate
+        } else {
+            event.endDate = startDate.addingTimeInterval(3600)
+        }
         event.calendar = eventStore.defaultCalendarForNewEvents
         try eventStore.save(event, span: .thisEvent)
         return event.eventIdentifier

@@ -76,6 +76,7 @@ struct NoteListDetailView: View {
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
                 .scrollDismissesKeyboard(.immediately)
+                .simultaneousGesture(TapGesture().onEnded { isInputFocused = false })
             }
 
             HStack(spacing: 8) {

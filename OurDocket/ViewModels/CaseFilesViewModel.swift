@@ -44,10 +44,6 @@ final class CaseFilesViewModel: ObservableObject {
         categoriesListener?.remove()
     }
 
-    func fileNumber(for file: CaseFile) -> Int {
-        (caseFiles.firstIndex(where: { $0.id == file.id }) ?? 0) + 1
-    }
-
     func createCaseFile(
         title: String,
         category: String,

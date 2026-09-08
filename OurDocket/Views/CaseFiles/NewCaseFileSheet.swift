@@ -112,14 +112,10 @@ struct NewCaseFileSheet: View {
 
     private var appearancePreview: some View {
         VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Color(hex: colorHex.isEmpty ? "1B2A4A" : colorHex))
-                    .frame(width: 88, height: 88)
-                Image(systemName: iconName.isEmpty ? "folder.fill" : iconName)
-                    .font(.system(size: 34))
-                    .foregroundStyle(.white)
-            }
+            Image(systemName: iconName.isEmpty ? "folder.fill" : iconName)
+                .font(.system(size: 56))
+                .foregroundStyle(Color(hex: colorHex.isEmpty ? "1B2A4A" : colorHex))
+                .frame(width: 88, height: 88)
 
             Button {
                 HapticFeedback.selection()

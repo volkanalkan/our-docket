@@ -49,7 +49,10 @@ struct DecisionCardView: View {
 
     private var dateLabel: String {
         guard let date = decision.date?.dateValue() else { return "Tarih: bilinmiyor" }
-        return date.formatted(date: .long, time: .omitted)
+        guard let end = decision.endDate?.dateValue(), !Calendar.current.isDate(end, inSameDayAs: date) else {
+            return date.formatted(date: .long, time: .omitted)
+        }
+        return "\(date.formatted(date: .long, time: .omitted)) – \(end.formatted(date: .long, time: .omitted))"
     }
 }
 

@@ -4,15 +4,20 @@ struct CaseFilesTimelineView: View {
     let coupleId: String
     @ObservedObject var viewModel: CaseFilesViewModel
     let files: [CaseFile]
+    let sort: CaseFilesListView.TimelineSort
     let onEdit: (CaseFile) -> Void
     let onDelete: (CaseFile) -> Void
 
-    /// Dated files/ranges flow chronologically (most recent first); files
-    /// with no date at all don't fit a timeline, so they're pinned below it
-    /// instead of interleaving arbitrarily among dated entries.
+    /// Dated files/ranges flow chronologically (direction set by `sort`);
+    /// files with no date at all don't fit a timeline, so they're pinned
+    /// below it instead of interleaving arbitrarily among dated entries.
     private var orderedFiles: [CaseFile] {
         let dated = files.filter { $0.eventStartDate != nil }
-            .sorted { ($0.eventStartDate?.dateValue() ?? .distantPast) > ($1.eventStartDate?.dateValue() ?? .distantPast) }
+            .sorted { lhs, rhs in
+                let l = lhs.eventStartDate?.dateValue() ?? .distantPast
+                let r = rhs.eventStartDate?.dateValue() ?? .distantPast
+                return sort == .newestFirst ? l > r : l < r
+            }
         let undated = files.filter { $0.eventStartDate == nil }
         return dated + undated
     }
@@ -40,11 +45,10 @@ struct CaseFilesTimelineView: View {
                             .foregroundStyle(.secondary)
 
                         NavigationLink {
-                            CaseFileDetailView(coupleId: coupleId, viewModel: viewModel, file: file, fileNumber: viewModel.fileNumber(for: file))
+                            CaseFileDetailView(coupleId: coupleId, viewModel: viewModel, file: file)
                         } label: {
-                            CaseFileCardView(file: file, number: viewModel.fileNumber(for: file))
+                            CaseFileCardView(file: file)
                         }
-                        .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
                     }
                     .padding(.bottom, 20)
                 }

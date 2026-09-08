@@ -10,10 +10,17 @@ struct CaseFilesListView: View {
     @State private var showingNewFileSheet = false
     @State private var editingFile: CaseFile?
     @State private var deletingFile: CaseFile?
+    @State private var timelineSort: TimelineSort = .newestFirst
 
     enum DisplayMode: String, CaseIterable {
         case list = "Liste"
         case timeline = "Zaman Çizelgesi"
+    }
+
+    enum TimelineSort: String, CaseIterable, Identifiable {
+        case newestFirst = "Yeniden Eskiye"
+        case oldestFirst = "Eskiden Yeniye"
+        var id: String { rawValue }
     }
 
     init(coupleId: String) {
@@ -32,8 +39,13 @@ struct CaseFilesListView: View {
 
             VStack(spacing: 16) {
                 HeaderBar(title: "Arşiv") {
-                    HeaderIconButton(systemImage: "plus") {
-                        showingNewFileSheet = true
+                    HStack(spacing: 8) {
+                        if displayMode == .timeline {
+                            timelineSortMenu
+                        }
+                        HeaderIconButton(systemImage: "plus") {
+                            showingNewFileSheet = true
+                        }
                     }
                 }
 
@@ -57,7 +69,7 @@ struct CaseFilesListView: View {
                             cardsList
                         case .timeline:
                             CaseFilesTimelineView(
-                                coupleId: coupleId, viewModel: viewModel, files: filteredFiles,
+                                coupleId: coupleId, viewModel: viewModel, files: filteredFiles, sort: timelineSort,
                                 onEdit: { editingFile = $0 }, onDelete: { deletingFile = $0 }
                             )
                         }
@@ -89,6 +101,25 @@ struct CaseFilesListView: View {
             Button("İptal", role: .cancel) { deletingFile = nil }
         } message: {
             Text("İçindeki tüm fotoğraf ve videolar da silinir. Bu işlem geri alınamaz.")
+        }
+    }
+
+    private var timelineSortMenu: some View {
+        Menu {
+            ForEach(TimelineSort.allCases) { option in
+                Button {
+                    HapticFeedback.selection()
+                    timelineSort = option
+                } label: {
+                    Label(option.rawValue, systemImage: timelineSort == option ? "checkmark" : "")
+                }
+            }
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Theme.navy)
+                .frame(width: 36, height: 36)
+                .background(Theme.navy.opacity(0.08), in: Circle())
         }
     }
 
@@ -143,11 +174,10 @@ struct CaseFilesListView: View {
         List {
             ForEach(filteredFiles) { file in
                 NavigationLink {
-                    CaseFileDetailView(coupleId: coupleId, viewModel: viewModel, file: file, fileNumber: viewModel.fileNumber(for: file))
+                    CaseFileDetailView(coupleId: coupleId, viewModel: viewModel, file: file)
                 } label: {
-                    CaseFileCardView(file: file, number: viewModel.fileNumber(for: file))
+                    CaseFileCardView(file: file)
                 }
-                .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
@@ -177,22 +207,15 @@ struct CaseFilesListView: View {
 
 struct CaseFileCardView: View {
     let file: CaseFile
-    let number: Int
 
     var body: some View {
         HStack(spacing: 14) {
-            ZStack {
-                Circle()
-                    .fill(Color(hex: file.colorHex))
-                    .frame(width: 44, height: 44)
-                Image(systemName: file.iconName)
-                    .foregroundStyle(.white)
-            }
+            Image(systemName: file.iconName)
+                .font(.system(size: 26))
+                .foregroundStyle(Color(hex: file.colorHex))
+                .frame(width: 44, height: 44)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Dosya No: \(String(format: "%03d", number))")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
                 Text(file.title)
                     .font(.system(.headline, design: .serif, weight: .semibold))
                     .foregroundStyle(Theme.navy)

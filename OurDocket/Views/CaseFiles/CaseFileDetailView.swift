@@ -5,7 +5,6 @@ struct CaseFileDetailView: View {
     let coupleId: String
     @ObservedObject var viewModel: CaseFilesViewModel
     let file: CaseFile
-    let fileNumber: Int
 
     private enum MediaSort: String, CaseIterable, Identifiable {
         case newestFirst = "Yeniden Eskiye"
@@ -71,9 +70,6 @@ struct CaseFileDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         HStack {
-                            Text("Dosya No: \(String(format: "%03d", fileNumber))")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
                             Text(currentFile.category)
                                 .font(.caption2)
                                 .padding(.horizontal, 8)

@@ -7,6 +7,8 @@ struct Decision: Codable, Identifiable {
     /// nil means the date is deliberately unknown/unset. Calendar and
     /// reminder options only make sense when this is set.
     var date: Timestamp?
+    /// Set only when the milestone spans a range rather than a single day.
+    var endDate: Timestamp?
     var description: String
     var addToCalendar: Bool
     var reminderEnabled: Bool
