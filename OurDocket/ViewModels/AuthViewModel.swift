@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import WidgetKit
 import AuthenticationServices
 import FirebaseAuth
 import FirebaseFirestore
@@ -45,6 +46,8 @@ final class AuthViewModel: ObservableObject {
 
         guard let user else {
             couple = nil
+            SharedRelationshipStore.save(startDate: nil)
+            WidgetCenter.shared.reloadAllTimelines()
             state = .signedOut
             return
         }
@@ -79,6 +82,8 @@ final class AuthViewModel: ObservableObject {
                 guard let self else { return }
                 let couple = try? snapshot?.data(as: Couple.self)
                 self.couple = couple
+                SharedRelationshipStore.save(startDate: couple?.relationshipStartDate?.dateValue())
+                WidgetCenter.shared.reloadAllTimelines()
                 self.state = couple?.relationshipStartDate != nil ? .ready(coupleId: coupleId) : .needsStartDate(coupleId: coupleId)
             }
     }
