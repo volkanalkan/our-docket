@@ -25,7 +25,7 @@ struct NotesView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 12) {
-                HeaderBar(title: "Notlar") {
+                HeaderBar(title: "Notes") {
                     HeaderIconButton(systemImage: "plus") {
                         newListTitle = ""
                         showingNewListAlert = true
@@ -55,18 +55,18 @@ struct NotesView: View {
             .animation(.default, value: selectedList?.id)
         }
         .navigationBarHidden(true)
-        .alert("Yeni Sekme", isPresented: $showingNewListAlert) {
-            TextField("örn. Market Alışverişi", text: $newListTitle)
-            Button("İptal", role: .cancel) {}
-            Button("Oluştur") {
+        .alert("New Tab", isPresented: $showingNewListAlert) {
+            TextField("e.g. Groceries", text: $newListTitle)
+            Button("Cancel", role: .cancel) {}
+            Button("Create") {
                 HapticFeedback.tap()
                 Task { await viewModel.createList(title: newListTitle) }
             }
         }
-        .alert("Sekmeyi Yeniden Adlandır", isPresented: Binding(get: { renamingList != nil }, set: { if !$0 { renamingList = nil } })) {
-            TextField("Sekme adı", text: $renameText)
-            Button("İptal", role: .cancel) { renamingList = nil }
-            Button("Kaydet") {
+        .alert("Rename Tab", isPresented: Binding(get: { renamingList != nil }, set: { if !$0 { renamingList = nil } })) {
+            TextField("Tab name", text: $renameText)
+            Button("Cancel", role: .cancel) { renamingList = nil }
+            Button("Save") {
                 if let renamingList {
                     Task { await viewModel.renameList(renamingList, newTitle: renameText) }
                 }
@@ -74,20 +74,20 @@ struct NotesView: View {
             }
         }
         .confirmationDialog(
-            "Bu sekmeyi silmek istediğine emin misin?",
+            "Are you sure you want to delete this tab?",
             isPresented: Binding(get: { deletingList != nil }, set: { if !$0 { deletingList = nil } }),
             titleVisibility: .visible
         ) {
-            Button("Sekmeyi Sil", role: .destructive) {
+            Button("Delete Tab", role: .destructive) {
                 if let deletingList {
                     HapticFeedback.tap()
                     Task { await viewModel.deleteList(deletingList) }
                 }
                 deletingList = nil
             }
-            Button("İptal", role: .cancel) { deletingList = nil }
+            Button("Cancel", role: .cancel) { deletingList = nil }
         } message: {
-            Text("İçindeki tüm maddeler de silinir.")
+            Text("All items inside it will be deleted too.")
         }
     }
 
@@ -111,12 +111,12 @@ struct NotesView: View {
                                 renamingList = list
                                 renameText = list.title
                             } label: {
-                                Label("Yeniden Adlandır", systemImage: "pencil")
+                                Label("Rename", systemImage: "pencil")
                             }
                             Button(role: .destructive) {
                                 deletingList = list
                             } label: {
-                                Label("Sil", systemImage: "trash")
+                                Label("Delete", systemImage: "trash")
                             }
                         } label: {
                             Image(systemName: "ellipsis")

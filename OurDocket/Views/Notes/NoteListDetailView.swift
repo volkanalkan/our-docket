@@ -32,7 +32,7 @@ struct NoteListDetailView: View {
                     Image(systemName: "checklist")
                         .font(.system(size: 36))
                         .foregroundStyle(Theme.gold)
-                    Text("Bu listede henüz madde yok")
+                    Text("No items in this list yet")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
@@ -62,7 +62,7 @@ struct NoteListDetailView: View {
                                 editingItem = item
                                 editText = item.text
                             } label: {
-                                Label("Düzenle", systemImage: "pencil")
+                                Label("Edit", systemImage: "pencil")
                             }
                             .tint(Theme.navy)
                         }
@@ -80,7 +80,7 @@ struct NoteListDetailView: View {
             }
 
             HStack(spacing: 8) {
-                TextField("Yeni madde ekle", text: $newItemText)
+                TextField("Add a new item", text: $newItemText)
                     .textFieldStyle(.roundedBorder)
                     .focused($isInputFocused)
                     .onSubmit { Task { await addItem() } }
@@ -98,10 +98,10 @@ struct NoteListDetailView: View {
             }
             .padding()
         }
-        .alert("Maddeyi Düzenle", isPresented: Binding(get: { editingItem != nil }, set: { if !$0 { editingItem = nil } })) {
-            TextField("Madde", text: $editText)
-            Button("İptal", role: .cancel) { editingItem = nil }
-            Button("Kaydet") {
+        .alert("Edit Item", isPresented: Binding(get: { editingItem != nil }, set: { if !$0 { editingItem = nil } })) {
+            TextField("Item", text: $editText)
+            Button("Cancel", role: .cancel) { editingItem = nil }
+            Button("Save") {
                 HapticFeedback.tap()
                 if let editingItem {
                     Task { await viewModel.editItem(editingItem, newText: editText, in: list) }

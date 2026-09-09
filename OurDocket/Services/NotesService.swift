@@ -10,7 +10,7 @@ final class NotesService {
     func ensureDefaultList(coupleId: String) async throws {
         let snapshot = try await noteListsCollection(coupleId: coupleId).limit(to: 1).getDocuments()
         guard snapshot.documents.isEmpty else { return }
-        try await createList(coupleId: coupleId, title: "Yapılacaklar")
+        try await createList(coupleId: coupleId, title: AppLanguage.localized("To-Do"))
     }
 
     @discardableResult

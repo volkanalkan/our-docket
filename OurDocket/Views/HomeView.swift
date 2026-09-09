@@ -73,7 +73,7 @@ struct HomeView: View {
                         VStack(spacing: 8) {
                             Image(systemName: "photo.badge.plus")
                                 .font(.system(size: 32))
-                            Text("Fotoğraf Ekle")
+                            Text("Add Photo")
                                 .font(.footnote)
                         }
                         .foregroundStyle(Theme.navy)

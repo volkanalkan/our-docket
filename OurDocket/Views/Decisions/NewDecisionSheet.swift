@@ -26,21 +26,21 @@ struct NewDecisionSheet: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: isEditing ? "Düzenle" : "Yeni Dönüm Noktası") {
+                HeaderBar(title: isEditing ? "Edit" : "New Milestone") {
                     HeaderIconButton(systemImage: "xmark") { dismiss() }
                 }
 
                 ScrollView {
                     VStack(spacing: 20) {
-                        fieldBlock(label: "Başlık") {
-                            TextField("örn. İlk \"Seni Seviyorum\"", text: $title)
+                        fieldBlock(label: "Title") {
+                            TextField("e.g. First \"I love you\"", text: $title)
                                 .padding(12)
                                 .background(.white.opacity(0.7))
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
 
-                        fieldBlock(label: "Açıklama") {
-                            TextField("Açıklama (opsiyonel)", text: $description, axis: .vertical)
+                        fieldBlock(label: "Description") {
+                            TextField("Description (optional)", text: $description, axis: .vertical)
                                 .lineLimit(3...6)
                                 .padding(12)
                                 .background(.white.opacity(0.7))
@@ -48,17 +48,17 @@ struct NewDecisionSheet: View {
                         }
 
                         VStack(spacing: 12) {
-                            Toggle("Bir tarih belirt", isOn: $hasDate.animation())
+                            Toggle("Set a date", isOn: $hasDate.animation())
 
                             if hasDate {
-                                DatePicker(isRange ? "Başlangıç" : "Tarih", selection: $date, displayedComponents: .date)
+                                DatePicker(isRange ? "Start" : "Date", selection: $date, displayedComponents: .date)
 
-                                Toggle("Bir tarih aralığı", isOn: $isRange.animation())
+                                Toggle("A date range", isOn: $isRange.animation())
                                 if isRange {
-                                    DatePicker("Bitiş", selection: $endDate, in: date..., displayedComponents: .date)
+                                    DatePicker("End", selection: $endDate, in: date..., displayedComponents: .date)
                                 }
 
-                                Toggle("Apple Calendar'a ekle", isOn: $addToCalendar)
+                                Toggle("Add to Apple Calendar", isOn: $addToCalendar)
                                     .onChange(of: addToCalendar) { _, newValue in
                                         handleCalendarToggle(newValue)
                                     }
@@ -72,17 +72,17 @@ struct NewDecisionSheet: View {
                                     }
                                     .buttonStyle(.plain)
                                     .popover(isPresented: $showingReminderInfo) {
-                                        Text("1 hafta önce (1 hafta kaldı) ve tarihin kendisinde (bugün) olmak üzere, her yıl saat 00:00'da bildirim gönderilir.")
+                                        Text("A notification is sent every year at 00:00 — one week before (1 week left) and on the date itself (today).")
                                             .font(.footnote)
                                             .padding()
                                             .frame(maxWidth: 280)
                                             .fixedSize(horizontal: false, vertical: true)
                                             .presentationCompactAdaptation(.popover)
                                     }
-                                    Toggle("Bildirim gönder", isOn: $reminderEnabled)
+                                    Toggle("Send notification", isOn: $reminderEnabled)
                                 }
 
-                                Toggle("Geçen süre sayacını göster", isOn: $showElapsedCounter)
+                                Toggle("Show elapsed time counter", isOn: $showElapsedCounter)
                             }
                         }
                         .padding(12)
@@ -93,7 +93,7 @@ struct NewDecisionSheet: View {
                             Text(error).foregroundStyle(.red).font(.footnote)
                         }
 
-                        Button(isEditing ? "Kaydet" : "Oluştur") {
+                        Button(isEditing ? "Save" : "Create") {
                             HapticFeedback.tap()
                             Task { await save() }
                         }
@@ -105,21 +105,21 @@ struct NewDecisionSheet: View {
             }
         }
         .confirmationDialog(
-            "Calendar'dan silinecek, emin misin?",
+            "It will be removed from Calendar. Are you sure?",
             isPresented: $showingCalendarRemovalConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Evet, Kaldır", role: .destructive) {
+            Button("Yes, Remove", role: .destructive) {
                 addToCalendar = false
             }
-            Button("Vazgeç", role: .cancel) {
+            Button("Never Mind", role: .cancel) {
                 addToCalendar = true
             }
         }
         .onAppear(perform: setUpInitialState)
     }
 
-    private func fieldBlock<Content: View>(label: String, @ViewBuilder content: () -> Content) -> some View {
+    private func fieldBlock<Content: View>(label: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(label)
                 .font(.caption.weight(.medium))

@@ -145,8 +145,8 @@ final class DecisionsService {
 
         guard let weekBefore = Calendar.current.date(byAdding: .day, value: -7, to: date) else { return }
 
-        try await scheduleYearlyReminder(id: "\(id)-day", body: "Bugün: \(title)", date: date, center: center)
-        try await scheduleYearlyReminder(id: "\(id)-week", body: "1 hafta sonra: \(title)", date: weekBefore, center: center)
+        try await scheduleYearlyReminder(id: "\(id)-day", body: AppLanguage.localized("Today: \(title)"), date: date, center: center)
+        try await scheduleYearlyReminder(id: "\(id)-week", body: AppLanguage.localized("In 1 week: \(title)"), date: weekBefore, center: center)
     }
 
     private func scheduleYearlyReminder(id: String, body: String, date: Date, center: UNUserNotificationCenter) async throws {

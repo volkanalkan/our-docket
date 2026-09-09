@@ -6,11 +6,20 @@ struct CaseFileDetailView: View {
     @ObservedObject var viewModel: CaseFilesViewModel
     let file: CaseFile
 
-    private enum MediaSort: String, CaseIterable, Identifiable {
-        case newestFirst = "Yeniden Eskiye"
-        case oldestFirst = "Eskiden Yeniye"
-        case shuffled = "Karışık"
-        var id: String { rawValue }
+    private enum MediaSort: CaseIterable, Identifiable {
+        case newestFirst
+        case oldestFirst
+        case shuffled
+
+        var id: Self { self }
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .newestFirst: "Newest First"
+            case .oldestFirst: "Oldest First"
+            case .shuffled: "Shuffled"
+            }
+        }
     }
 
     @EnvironmentObject private var authViewModel: AuthViewModel
@@ -47,7 +56,7 @@ struct CaseFileDetailView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: currentFile.title) {
+                HeaderBar(verbatimTitle: currentFile.title) {
                     Menu {
                         ForEach(MediaSort.allCases) { option in
                             Button {
@@ -55,7 +64,7 @@ struct CaseFileDetailView: View {
                                 if option == .shuffled { shuffleSeed = UUID() }
                                 sort = option
                             } label: {
-                                Label(option.rawValue, systemImage: sort == option ? "checkmark" : "")
+                                Label(option.title, systemImage: sort == option ? "checkmark" : "")
                             }
                         }
                     } label: {
@@ -116,7 +125,7 @@ struct CaseFileDetailView: View {
                                     Button(role: .destructive) {
                                         deletingMediaItem = item
                                     } label: {
-                                        Label("Sil", systemImage: "trash")
+                                        Label("Delete", systemImage: "trash")
                                     }
                                 }
                                 .transition(.scale.combined(with: .opacity))
@@ -152,18 +161,18 @@ struct CaseFileDetailView: View {
             }
         }
         .confirmationDialog(
-            "Bu fotoğrafı/videoyu silmek istediğine emin misin?",
+            "Are you sure you want to delete this photo/video?",
             isPresented: Binding(get: { deletingMediaItem != nil }, set: { if !$0 { deletingMediaItem = nil } }),
             titleVisibility: .visible
         ) {
-            Button("Sil", role: .destructive) {
+            Button("Delete", role: .destructive) {
                 if let deletingMediaItem {
                     HapticFeedback.tap()
                     Task { await viewModel.deleteMedia(deletingMediaItem, from: currentFile) }
                 }
                 deletingMediaItem = nil
             }
-            Button("İptal", role: .cancel) { deletingMediaItem = nil }
+            Button("Cancel", role: .cancel) { deletingMediaItem = nil }
         }
     }
 

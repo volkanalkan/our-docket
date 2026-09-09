@@ -10,13 +10,13 @@ enum PairingError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidCode:
-            return "Bu davet kodu geçersiz."
+            return AppLanguage.localized("This invite code is invalid.")
         case .codeExpired:
-            return "Bu davet kodunun süresi dolmuş."
+            return AppLanguage.localized("This invite code has expired.")
         case .cannotPairWithSelf:
-            return "Kendi davet kodunu kullanamazsın."
+            return AppLanguage.localized("You can't use your own invite code.")
         case .partnerAlreadyPaired:
-            return "Bu kişi zaten başka biriyle eşleşmiş."
+            return AppLanguage.localized("This person is already paired with someone else.")
         }
     }
 }

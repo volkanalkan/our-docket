@@ -22,7 +22,7 @@ struct PortraitCropView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: "Fotoğrafı Ayarla") {
+                HeaderBar(title: "Adjust Photo") {
                     Color.clear.frame(width: 36, height: 36)
                 }
 
@@ -31,7 +31,7 @@ struct PortraitCropView: View {
 
                     if let sourceImage {
                         cropArea(image: sourceImage)
-                        Text("Konumlamak için sürükle, büyütmek için sıkıştır")
+                        Text("Drag to position, pinch to zoom")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
@@ -39,7 +39,7 @@ struct PortraitCropView: View {
                             VStack(spacing: 12) {
                                 Image(systemName: "photo.badge.plus")
                                     .font(.system(size: 40))
-                                Text("Fotoğraf Seç")
+                                Text("Choose Photo")
                             }
                             .foregroundStyle(Theme.navy)
                             .frame(width: frameSize.width, height: frameSize.height)
@@ -65,7 +65,7 @@ struct PortraitCropView: View {
                                 if isUploading {
                                     ProgressView().tint(.white)
                                 } else {
-                                    Text("Kaydet")
+                                    Text("Save")
                                 }
                             }
                             .frame(maxWidth: .infinity)
@@ -137,7 +137,7 @@ struct PortraitCropView: View {
         do {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let image = UIImage(data: data) else {
-                errorMessage = "Fotoğraf yüklenemedi."
+                errorMessage = AppLanguage.localized("The photo couldn't be loaded.")
                 return
             }
             sourceImage = image
@@ -146,7 +146,7 @@ struct PortraitCropView: View {
             offset = .zero
             lastOffset = .zero
         } catch {
-            errorMessage = "Fotoğraf yüklenemedi."
+            errorMessage = AppLanguage.localized("The photo couldn't be loaded.")
         }
     }
 

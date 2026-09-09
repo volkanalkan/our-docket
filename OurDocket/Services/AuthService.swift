@@ -10,7 +10,7 @@ enum AuthServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingIdentityToken:
-            return "Apple kimlik bilgisi alınamadı, lütfen tekrar deneyin."
+            return AppLanguage.localized("Apple credentials couldn't be retrieved, please try again.")
         }
     }
 }
@@ -86,9 +86,10 @@ final class AuthService: ObservableObject {
 
         let formattedName = fullName.map { PersonNameComponentsFormatter().string(from: $0) } ?? ""
         let newUser = AppUser(
-            displayName: formattedName.isEmpty ? "Kullanıcı" : formattedName,
+            displayName: formattedName.isEmpty ? AppLanguage.localized("User") : formattedName,
             appleUserId: appleUserId,
-            coupleId: nil
+            coupleId: nil,
+            preferredLanguage: LanguageStore.shared.selection?.rawValue
         )
         try await ref.setData(from: newUser)
     }

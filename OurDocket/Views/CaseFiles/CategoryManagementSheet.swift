@@ -13,7 +13,7 @@ struct CategoryManagementSheet: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: "Kategoriler") {
+                HeaderBar(title: "Categories") {
                     HeaderIconButton(systemImage: "xmark") { dismiss() }
                 }
 
@@ -26,7 +26,7 @@ struct CategoryManagementSheet: View {
                                     renamingCategory = category
                                     renameText = category.name
                                 } label: {
-                                    Label("Düzenle", systemImage: "pencil")
+                                    Label("Edit", systemImage: "pencil")
                                 }
                                 .tint(Theme.navy)
                             }
@@ -35,15 +35,15 @@ struct CategoryManagementSheet: View {
                                     HapticFeedback.tap()
                                     Task { await viewModel.deleteCategory(category) }
                                 } label: {
-                                    Label("Sil", systemImage: "trash")
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                             .listRowBackground(Color.white.opacity(0.6))
                     }
 
                     HStack {
-                        TextField("Yeni kategori", text: $newCategoryName)
-                        Button("Ekle") {
+                        TextField("New category", text: $newCategoryName)
+                        Button("Add") {
                             HapticFeedback.tap()
                             Task {
                                 await viewModel.createCategory(name: newCategoryName)
@@ -59,10 +59,10 @@ struct CategoryManagementSheet: View {
                 .scrollContentBackground(.hidden)
             }
         }
-        .alert("Kategoriyi Düzenle", isPresented: Binding(get: { renamingCategory != nil }, set: { if !$0 { renamingCategory = nil } })) {
-            TextField("Kategori adı", text: $renameText)
-            Button("İptal", role: .cancel) { renamingCategory = nil }
-            Button("Kaydet") {
+        .alert("Edit Category", isPresented: Binding(get: { renamingCategory != nil }, set: { if !$0 { renamingCategory = nil } })) {
+            TextField("Category name", text: $renameText)
+            Button("Cancel", role: .cancel) { renamingCategory = nil }
+            Button("Save") {
                 if let renamingCategory {
                     Task { await viewModel.renameCategory(renamingCategory, newName: renameText) }
                 }

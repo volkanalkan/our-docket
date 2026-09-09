@@ -1,28 +1,38 @@
 import SwiftUI
 
-struct ShortcutCard: Identifiable, Hashable {
-    let id = UUID()
-    let title: String
-    let systemImage: String
+enum ShortcutDestination: CaseIterable, Hashable {
+    case archive
+    case notes
+    case milestones
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .archive: "Archive"
+        case .notes: "Notes"
+        case .milestones: "Milestones"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .archive: "folder.fill"
+        case .notes: "checklist"
+        case .milestones: "seal.fill"
+        }
+    }
 }
 
 struct ShortcutCardsView: View {
     let coupleId: String
 
-    private let cards: [ShortcutCard] = [
-        ShortcutCard(title: "Arşiv", systemImage: "folder.fill"),
-        ShortcutCard(title: "Notlar", systemImage: "checklist"),
-        ShortcutCard(title: "Dönüm Noktaları", systemImage: "seal.fill")
-    ]
-
     var body: some View {
         HStack(spacing: 12) {
-            ForEach(cards) { card in
-                NavigationLink(value: card) {
+            ForEach(ShortcutDestination.allCases, id: \.self) { destination in
+                NavigationLink(value: destination) {
                     VStack(spacing: 8) {
-                        Image(systemName: card.systemImage)
+                        Image(systemName: destination.systemImage)
                             .font(.title2)
-                        Text(card.title)
+                        Text(destination.title)
                             .font(.caption)
                             .multilineTextAlignment(.center)
                     }
@@ -36,16 +46,14 @@ struct ShortcutCardsView: View {
                 .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
             }
         }
-        .navigationDestination(for: ShortcutCard.self) { card in
-            switch card.title {
-            case "Arşiv":
+        .navigationDestination(for: ShortcutDestination.self) { destination in
+            switch destination {
+            case .archive:
                 CaseFilesListView(coupleId: coupleId)
-            case "Notlar":
+            case .notes:
                 NotesView(coupleId: coupleId)
-            case "Dönüm Noktaları":
+            case .milestones:
                 DecisionsListView(coupleId: coupleId)
-            default:
-                EmptyView()
             }
         }
     }

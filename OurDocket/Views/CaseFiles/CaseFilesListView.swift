@@ -12,15 +12,30 @@ struct CaseFilesListView: View {
     @State private var deletingFile: CaseFile?
     @State private var timelineSort: TimelineSort = .newestFirst
 
-    enum DisplayMode: String, CaseIterable {
-        case list = "Liste"
-        case timeline = "Zaman Çizelgesi"
+    enum DisplayMode: CaseIterable {
+        case list
+        case timeline
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .list: "List"
+            case .timeline: "Timeline"
+            }
+        }
     }
 
-    enum TimelineSort: String, CaseIterable, Identifiable {
-        case newestFirst = "Yeniden Eskiye"
-        case oldestFirst = "Eskiden Yeniye"
-        var id: String { rawValue }
+    enum TimelineSort: CaseIterable, Identifiable {
+        case newestFirst
+        case oldestFirst
+
+        var id: Self { self }
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .newestFirst: "Newest First"
+            case .oldestFirst: "Oldest First"
+            }
+        }
     }
 
     init(coupleId: String) {
@@ -38,7 +53,7 @@ struct CaseFilesListView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 16) {
-                HeaderBar(title: "Arşiv") {
+                HeaderBar(title: "Archive") {
                     HStack(spacing: 8) {
                         if displayMode == .timeline {
                             timelineSortMenu
@@ -49,9 +64,9 @@ struct CaseFilesListView: View {
                     }
                 }
 
-                Picker("Görünüm", selection: $displayMode) {
+                Picker("View", selection: $displayMode) {
                     ForEach(DisplayMode.allCases, id: \.self) { mode in
-                        Text(mode.rawValue).tag(mode)
+                        Text(mode.title).tag(mode)
                     }
                 }
                 .pickerStyle(.segmented)
@@ -87,20 +102,20 @@ struct CaseFilesListView: View {
             NewCaseFileSheet(viewModel: viewModel, editingFile: file)
         }
         .confirmationDialog(
-            "Bu dosyayı silmek istediğine emin misin?",
+            "Are you sure you want to delete this file?",
             isPresented: Binding(get: { deletingFile != nil }, set: { if !$0 { deletingFile = nil } }),
             titleVisibility: .visible
         ) {
-            Button("Dosyayı Sil", role: .destructive) {
+            Button("Delete File", role: .destructive) {
                 if let deletingFile {
                     HapticFeedback.tap()
                     Task { await viewModel.deleteCaseFile(deletingFile) }
                 }
                 self.deletingFile = nil
             }
-            Button("İptal", role: .cancel) { deletingFile = nil }
+            Button("Cancel", role: .cancel) { deletingFile = nil }
         } message: {
-            Text("İçindeki tüm fotoğraf ve videolar da silinir. Bu işlem geri alınamaz.")
+            Text("All photos and videos inside it will be deleted too. This cannot be undone.")
         }
     }
 
@@ -111,7 +126,7 @@ struct CaseFilesListView: View {
                     HapticFeedback.selection()
                     timelineSort = option
                 } label: {
-                    Label(option.rawValue, systemImage: timelineSort == option ? "checkmark" : "")
+                    Label(option.title, systemImage: timelineSort == option ? "checkmark" : "")
                 }
             }
         } label: {
@@ -126,11 +141,11 @@ struct CaseFilesListView: View {
     private var categoryFilter: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                categoryChip(title: "Tümü", isSelected: selectedCategory == nil) {
+                categoryChip(title: Text("All"), isSelected: selectedCategory == nil) {
                     selectedCategory = nil
                 }
                 ForEach(viewModel.categories) { category in
-                    categoryChip(title: category.name, isSelected: selectedCategory == category.name) {
+                    categoryChip(title: Text(verbatim: category.name), isSelected: selectedCategory == category.name) {
                         selectedCategory = category.name
                     }
                 }
@@ -139,12 +154,12 @@ struct CaseFilesListView: View {
         }
     }
 
-    private func categoryChip(title: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    private func categoryChip(title: Text, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button {
             HapticFeedback.selection()
             withAnimation(.snappy) { action() }
         } label: {
-            Text(title)
+            title
                 .font(.footnote.weight(.medium))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
@@ -161,10 +176,10 @@ struct CaseFilesListView: View {
             Image(systemName: "folder.badge.plus")
                 .font(.system(size: 40))
                 .foregroundStyle(Theme.gold)
-            Text("Henüz dosya yok")
+            Text("No files yet")
                 .font(.system(.headline, design: .serif))
                 .foregroundStyle(Theme.navy)
-            Text("Sağ üstten yeni bir dosya oluştur.")
+            Text("Create a new file from the top right.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             Spacer()
@@ -187,7 +202,7 @@ struct CaseFilesListView: View {
                         HapticFeedback.tap()
                         editingFile = file
                     } label: {
-                        Label("Düzenle", systemImage: "pencil")
+                        Label("Edit", systemImage: "pencil")
                     }
                     .tint(Theme.navy)
                 }
@@ -196,7 +211,7 @@ struct CaseFilesListView: View {
                         HapticFeedback.tap()
                         deletingFile = file
                     } label: {
-                        Label("Sil", systemImage: "trash")
+                        Label("Delete", systemImage: "trash")
                     }
                 }
             }

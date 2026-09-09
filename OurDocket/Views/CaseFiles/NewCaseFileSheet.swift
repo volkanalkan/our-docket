@@ -8,11 +8,20 @@ struct NewCaseFileSheet: View {
     @EnvironmentObject private var authViewModel: AuthViewModel
     @Environment(\.dismiss) private var dismiss
 
-    private enum DateOption: String, CaseIterable, Identifiable {
-        case today = "Bugün"
-        case chosen = "Tarih Seç"
-        case none = "Tarih Yok"
-        var id: String { rawValue }
+    private enum DateOption: CaseIterable, Identifiable {
+        case today
+        case chosen
+        case none
+
+        var id: Self { self }
+
+        var title: LocalizedStringKey {
+            switch self {
+            case .today: "Today"
+            case .chosen: "Pick a Date"
+            case .none: "No Date"
+            }
+        }
     }
 
     @State private var title = ""
@@ -33,7 +42,7 @@ struct NewCaseFileSheet: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: isEditing ? "Dosyayı Düzenle" : "Yeni Dosya") {
+                HeaderBar(title: isEditing ? "Edit File" : "New File") {
                     HeaderIconButton(systemImage: "xmark") { dismiss() }
                 }
 
@@ -42,10 +51,10 @@ struct NewCaseFileSheet: View {
                         appearancePreview
 
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Başlık")
+                            Text("Title")
                                 .font(.caption.weight(.medium))
                                 .foregroundStyle(.secondary)
-                            TextField("örn. Kapadokya Gezisi", text: $title)
+                            TextField("e.g. Cappadocia Trip", text: $title)
                                 .padding(12)
                                 .background(.white.opacity(0.7))
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -53,11 +62,11 @@ struct NewCaseFileSheet: View {
 
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
-                                Text("Kategori")
+                                Text("Category")
                                     .font(.caption.weight(.medium))
                                     .foregroundStyle(.secondary)
                                 Spacer()
-                                Button("Düzenle") { showingCategoryManagement = true }
+                                Button("Edit") { showingCategoryManagement = true }
                                     .buttonStyle(.plain)
                                     .font(.caption)
                             }
@@ -65,23 +74,23 @@ struct NewCaseFileSheet: View {
                         }
 
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Tarih")
+                            Text("Date")
                                 .font(.caption.weight(.medium))
                                 .foregroundStyle(.secondary)
 
-                            Picker("Tarih", selection: $dateOption) {
+                            Picker("Date", selection: $dateOption) {
                                 ForEach(DateOption.allCases) { option in
-                                    Text(option.rawValue).tag(option)
+                                    Text(option.title).tag(option)
                                 }
                             }
                             .pickerStyle(.segmented)
 
                             if dateOption == .chosen {
                                 VStack(spacing: 12) {
-                                    DatePicker("Başlangıç", selection: $startDate, displayedComponents: .date)
-                                    Toggle("Bir tarih aralığı (örn. bir hafta)", isOn: $isRange.animation())
+                                    DatePicker("Start", selection: $startDate, displayedComponents: .date)
+                                    Toggle("A date range (e.g. a week)", isOn: $isRange.animation())
                                     if isRange {
-                                        DatePicker("Bitiş", selection: $endDate, in: startDate..., displayedComponents: .date)
+                                        DatePicker("End", selection: $endDate, in: startDate..., displayedComponents: .date)
                                     }
                                 }
                                 .padding(12)
@@ -94,7 +103,7 @@ struct NewCaseFileSheet: View {
                             Text(error).foregroundStyle(.red).font(.footnote)
                         }
 
-                        Button(isEditing ? "Kaydet" : "Oluştur") {
+                        Button(isEditing ? "Save" : "Create") {
                             HapticFeedback.tap()
                             Task { await save() }
                         }
@@ -126,7 +135,7 @@ struct NewCaseFileSheet: View {
                     colorHex = random.colorHex
                 }
             } label: {
-                Label("Rastgele", systemImage: "shuffle")
+                Label("Shuffle", systemImage: "shuffle")
             }
             .buttonStyle(.ourDocketSecondary)
             .frame(maxWidth: 160)

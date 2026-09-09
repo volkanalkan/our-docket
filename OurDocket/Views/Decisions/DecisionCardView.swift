@@ -31,10 +31,10 @@ struct DecisionCardView: View {
             if decision.addToCalendar || decision.reminderEnabled {
                 HStack(spacing: 12) {
                     if decision.addToCalendar {
-                        Label("Takvimde", systemImage: "calendar")
+                        Label("In Calendar", systemImage: "calendar")
                     }
                     if decision.reminderEnabled {
-                        Label("Bildirim açık", systemImage: "bell.fill")
+                        Label("Reminder on", systemImage: "bell.fill")
                     }
                 }
                 .font(.caption2.weight(.medium))
@@ -48,11 +48,11 @@ struct DecisionCardView: View {
     }
 
     private var dateLabel: String {
-        guard let date = decision.date?.dateValue() else { return "Tarih: bilinmiyor" }
+        guard let date = decision.date?.dateValue() else { return AppLanguage.localized("Date: unknown") }
         guard let end = decision.endDate?.dateValue(), !Calendar.current.isDate(end, inSameDayAs: date) else {
-            return date.formatted(date: .long, time: .omitted)
+            return date.formatted(appStyle: .long)
         }
-        return "\(date.formatted(date: .long, time: .omitted)) – \(end.formatted(date: .long, time: .omitted))"
+        return "\(date.formatted(appStyle: .long)) – \(end.formatted(appStyle: .long))"
     }
 }
 
@@ -62,7 +62,13 @@ private struct ElapsedCounterView: View {
     var body: some View {
         TimelineView(.periodic(from: since, by: 86_400)) { context in
             let components = Calendar.current.dateComponents([.year, .month, .day], from: since, to: context.date)
-            Text("\(components.year ?? 0) yıl, \(components.month ?? 0) ay, \(components.day ?? 0) gün geçti")
+            let elapsed = [
+                AppLanguage.localized("\(components.year ?? 0) years"),
+                AppLanguage.localized("\(components.month ?? 0) months"),
+                AppLanguage.localized("\(components.day ?? 0) days")
+            ].joined(separator: ", ")
+
+            Text("\(elapsed) have passed")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(Theme.navy)
                 .padding(.horizontal, 10)

@@ -18,7 +18,7 @@ struct DecisionsListView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: "Dönüm Noktaları") {
+                HeaderBar(title: "Milestones") {
                     HStack(spacing: 8) {
                         sortMenu
                         HeaderIconButton(systemImage: "plus") { showingNewSheet = true }
@@ -41,18 +41,18 @@ struct DecisionsListView: View {
             NewDecisionSheet(viewModel: viewModel, editingDecision: decision)
         }
         .confirmationDialog(
-            "Bu dönüm noktasını silmek istediğine emin misin?",
+            "Are you sure you want to delete this milestone?",
             isPresented: Binding(get: { deletingDecision != nil }, set: { if !$0 { deletingDecision = nil } }),
             titleVisibility: .visible
         ) {
-            Button("Sil", role: .destructive) {
+            Button("Delete", role: .destructive) {
                 if let deletingDecision {
                     HapticFeedback.tap()
                     Task { await viewModel.deleteDecision(deletingDecision) }
                 }
                 deletingDecision = nil
             }
-            Button("İptal", role: .cancel) { deletingDecision = nil }
+            Button("Cancel", role: .cancel) { deletingDecision = nil }
         }
     }
 
@@ -63,7 +63,7 @@ struct DecisionsListView: View {
                     HapticFeedback.selection()
                     viewModel.sort = option
                 } label: {
-                    Label(option.rawValue, systemImage: viewModel.sort == option ? "checkmark" : "")
+                    Label(option.title, systemImage: viewModel.sort == option ? "checkmark" : "")
                 }
             }
         } label: {
@@ -92,7 +92,7 @@ struct DecisionsListView: View {
                             HapticFeedback.tap()
                             editingDecision = decision
                         } label: {
-                            Label("Düzenle", systemImage: "pencil")
+                            Label("Edit", systemImage: "pencil")
                         }
                         .tint(Theme.navy)
                     }
@@ -101,7 +101,7 @@ struct DecisionsListView: View {
                             HapticFeedback.tap()
                             deletingDecision = decision
                         } label: {
-                            Label("Sil", systemImage: "trash")
+                            Label("Delete", systemImage: "trash")
                         }
                     }
             }
@@ -121,10 +121,10 @@ struct DecisionsListView: View {
             Image(systemName: "seal")
                 .font(.system(size: 40))
                 .foregroundStyle(Theme.gold)
-            Text("Henüz bir şey yok")
+            Text("Nothing here yet")
                 .font(.system(.headline, design: .serif))
                 .foregroundStyle(Theme.navy)
-            Text("Sağ üstten yeni bir dönüm noktası ekle.")
+            Text("Add a new milestone from the top right.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             Spacer()

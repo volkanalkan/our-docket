@@ -39,5 +39,15 @@ struct CaseFileCategoryOption: Codable, Identifiable {
     var name: String
     @ServerTimestamp var createdAt: Timestamp?
 
-    static let defaultNames = ["Tatil", "Özel Gün", "Günlük", "Diğer"]
+    /// Resolved in the couple's language at bootstrap time; these are
+    /// persisted data afterwards, not UI strings, so they don't follow
+    /// later language switches.
+    static var defaultNames: [String] {
+        [
+            AppLanguage.localized("Holiday"),
+            AppLanguage.localized("Special Day"),
+            AppLanguage.localized("Daily"),
+            AppLanguage.localized("Other")
+        ]
+    }
 }

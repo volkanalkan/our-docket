@@ -13,9 +13,9 @@ enum CaseFileServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedMedia:
-            return "Bu dosya türü desteklenmiyor."
+            return AppLanguage.localized("This file type isn't supported.")
         case .encodingFailed:
-            return "Medya işlenemedi, lütfen tekrar dene."
+            return AppLanguage.localized("The media couldn't be processed, please try again.")
         }
     }
 }

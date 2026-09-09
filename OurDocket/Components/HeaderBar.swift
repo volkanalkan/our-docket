@@ -7,11 +7,25 @@ import SwiftUI
 /// own visual language — appropriate for system apps, not for the fixed
 /// look this app wants everywhere, on every OS version and every setting.
 struct HeaderBar<Trailing: View>: View {
-    let title: String
-    var showBack = true
-    @ViewBuilder var trailing: () -> Trailing
+    private let title: Text
+    private let showBack: Bool
+    @ViewBuilder private let trailing: () -> Trailing
 
     @Environment(\.dismiss) private var dismiss
+
+    init(title: LocalizedStringKey, showBack: Bool = true, @ViewBuilder trailing: @escaping () -> Trailing) {
+        self.title = Text(title)
+        self.showBack = showBack
+        self.trailing = trailing
+    }
+
+    /// For user-authored titles (a case file's name), which must never be
+    /// run through the localization table.
+    init(verbatimTitle: String, showBack: Bool = true, @ViewBuilder trailing: @escaping () -> Trailing) {
+        self.title = Text(verbatim: verbatimTitle)
+        self.showBack = showBack
+        self.trailing = trailing
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -23,7 +37,7 @@ struct HeaderBar<Trailing: View>: View {
                 Color.clear.frame(width: 36, height: 36)
             }
 
-            Text(title)
+            title
                 .font(.system(.headline, design: .serif, weight: .bold))
                 .foregroundStyle(Theme.navy)
                 .lineLimit(1)
@@ -35,14 +49,6 @@ struct HeaderBar<Trailing: View>: View {
         .padding(.horizontal)
         .padding(.top, 8)
         .padding(.bottom, 4)
-    }
-}
-
-extension HeaderBar where Trailing == EmptyView {
-    init(title: String, showBack: Bool = true) {
-        self.title = title
-        self.showBack = showBack
-        self.trailing = { EmptyView() }
     }
 }
 

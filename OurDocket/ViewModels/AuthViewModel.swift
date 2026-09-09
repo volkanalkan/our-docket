@@ -56,8 +56,23 @@ final class AuthViewModel: ObservableObject {
             .addSnapshotListener { [weak self] snapshot, _ in
                 guard let self else { return }
                 let appUser = try? snapshot?.data(as: AppUser.self)
+                // The server copy is the cross-device source of truth for the
+                // language; skip local-echo snapshots so a fresh pick can't be
+                // momentarily overwritten by the value it's replacing.
+                if snapshot?.metadata.hasPendingWrites == false,
+                   let remote = appUser?.preferredLanguage.flatMap(AppLanguage.init(rawValue:)) {
+                    LanguageStore.shared.select(remote)
+                }
                 self.handleUserDocument(coupleId: appUser?.coupleId)
             }
+    }
+
+    func setPreferredLanguage(_ language: AppLanguage) async {
+        LanguageStore.shared.select(language)
+        WidgetCenter.shared.reloadAllTimelines()
+        guard let uid = currentUserId else { return }
+        try? await Firestore.firestore().collection("users").document(uid)
+            .setData(["preferredLanguage": language.rawValue], merge: true)
     }
 
     /// The users/{uid} listener can redeliver the same coupleId more than
@@ -93,7 +108,7 @@ final class AuthViewModel: ObservableObject {
         switch result {
         case .success(let authorization):
             guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-                errorMessage = "Beklenmeyen kimlik bilgisi türü."
+                errorMessage = AppLanguage.localized("Unexpected credential type.")
                 return
             }
             do {

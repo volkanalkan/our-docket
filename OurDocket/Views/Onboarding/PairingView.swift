@@ -18,7 +18,7 @@ struct PairingView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 24) {
-                Text("Eşleşme")
+                Text("Pairing")
                     .font(.system(.title, design: .serif, weight: .bold))
                     .foregroundStyle(Theme.navy)
 
@@ -43,7 +43,7 @@ struct PairingView: View {
 
                 Spacer()
 
-                Button("Çıkış Yap", role: .destructive) {
+                Button("Sign Out", role: .destructive) {
                     HapticFeedback.tap()
                     authViewModel.signOut()
                 }
@@ -70,7 +70,7 @@ struct PairingView: View {
                     }
                 }
             } label: {
-                Label("Davet Kodu Oluştur", systemImage: "person.badge.plus")
+                Label("Create Invite Code", systemImage: "person.badge.plus")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.ourDocketPrimary)
@@ -80,7 +80,7 @@ struct PairingView: View {
                 authViewModel.errorMessage = nil
                 withAnimation { mode = .enterCode }
             } label: {
-                Label("Davet Kodu Gir", systemImage: "number")
+                Label("Enter Invite Code", systemImage: "number")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.ourDocketSecondary)
@@ -90,7 +90,7 @@ struct PairingView: View {
 
     private var showCodeView: some View {
         VStack(spacing: 12) {
-            Text("Partnerine bu kodu gönder:")
+            Text("Send this code to your partner:")
                 .foregroundStyle(.secondary)
 
             Text(generatedCode ?? "")
@@ -98,11 +98,11 @@ struct PairingView: View {
                 .foregroundStyle(Theme.navy)
                 .textSelection(.enabled)
 
-            Text("Kod 24 saat geçerlidir.")
+            Text("The code is valid for 24 hours.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }
+            Button("Back") { HapticFeedback.tap(); withAnimation { mode = .choose } }
                 .buttonStyle(.plain)
                 .font(.footnote)
                 .padding(.top, 8)
@@ -111,7 +111,7 @@ struct PairingView: View {
 
     private var enterCodeView: some View {
         VStack(spacing: 12) {
-            TextField("6 haneli kod", text: $enteredCode)
+            TextField("6-digit code", text: $enteredCode)
                 .keyboardType(.numberPad)
                 .textFieldStyle(.roundedBorder)
                 .multilineTextAlignment(.center)
@@ -134,13 +134,13 @@ struct PairingView: View {
                     }
                 }
             } label: {
-                Text("Eşleş")
+                Text("Pair")
                     .frame(maxWidth: 200)
             }
             .buttonStyle(.ourDocketPrimary)
             .disabled(enteredCode.count != 6 || isBusy)
 
-            Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }
+            Button("Back") { HapticFeedback.tap(); withAnimation { mode = .choose } }
                 .buttonStyle(.plain)
                 .font(.footnote)
         }

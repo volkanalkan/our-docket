@@ -39,9 +39,13 @@ struct OurDocketWidgetEntryView: View {
     let entry: RelationshipEntry
 
     private var durationText: String {
-        guard let startDate = entry.startDate else { return "Henüz eşleşme yok" }
+        guard let startDate = entry.startDate else { return AppLanguage.localized("Not paired yet") }
         let components = Calendar.current.dateComponents([.year, .month, .day], from: startDate, to: entry.date)
-        return "\(components.year ?? 0) yıl \(components.month ?? 0) ay \(components.day ?? 0) gün"
+        return [
+            AppLanguage.localized("\(components.year ?? 0) years"),
+            AppLanguage.localized("\(components.month ?? 0) months"),
+            AppLanguage.localized("\(components.day ?? 0) days")
+        ].joined(separator: " ")
     }
 
     var body: some View {
@@ -51,7 +55,7 @@ struct OurDocketWidgetEntryView: View {
 
         case .accessoryRectangular:
             VStack(alignment: .leading, spacing: 2) {
-                Text("Our Docket")
+                Text(verbatim: "Our Docket")
                     .font(.caption2)
                 Text(durationText)
                     .font(.headline)
@@ -82,9 +86,10 @@ struct OurDocketWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: RelationshipTimelineProvider()) { entry in
             OurDocketWidgetEntryView(entry: entry)
+                .environment(\.locale, AppLanguage.current.locale)
         }
         .configurationDisplayName("Our Docket")
-        .description("Birlikte geçen süreyi gösterir.")
+        .description("Shows the time you've spent together.")
         .supportedFamilies([.systemSmall, .systemMedium, .accessoryRectangular, .accessoryInline])
     }
 }

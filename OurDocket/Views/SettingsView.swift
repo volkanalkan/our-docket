@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject private var languageStore: LanguageStore
     @Environment(\.dismiss) private var dismiss
 
     @State private var showingDeleteConfirmation = false
@@ -12,12 +13,14 @@ struct SettingsView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: "Ayarlar", showBack: false) {
+                HeaderBar(title: "Settings", showBack: false) {
                     HeaderIconButton(systemImage: "xmark") { dismiss() }
                 }
 
                 VStack(spacing: 20) {
-                    Button("Çıkış Yap") {
+                    languagePicker
+
+                    Button("Sign Out") {
                         HapticFeedback.tap()
                         authViewModel.signOut()
                         dismiss()
@@ -25,13 +28,13 @@ struct SettingsView: View {
                     .buttonStyle(.ourDocketSecondary)
 
                     VStack(spacing: 8) {
-                        Button("Hesabı Sil") {
+                        Button("Delete Account") {
                             showingDeleteConfirmation = true
                         }
                         .buttonStyle(.ourDocketDestructive)
                         .disabled(isDeleting)
 
-                        Text("Hesabını sildiğinde giriş bilgilerin kalıcı olarak kaldırılır. Paylaştığın anılar, notlar ve kararlar partnerinin hesabında kalmaya devam eder.")
+                        Text("Deleting your account permanently removes your sign-in credentials. The memories, notes and milestones you shared stay in your partner's account.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -50,11 +53,11 @@ struct SettingsView: View {
             }
         }
         .confirmationDialog(
-            "Hesabını silmek istediğine emin misin?",
+            "Are you sure you want to delete your account?",
             isPresented: $showingDeleteConfirmation,
             titleVisibility: .visible
         ) {
-            Button("Hesabı Sil", role: .destructive) {
+            Button("Delete Account", role: .destructive) {
                 Task {
                     isDeleting = true
                     await authViewModel.deleteAccount()
@@ -64,14 +67,43 @@ struct SettingsView: View {
                     }
                 }
             }
-            Button("İptal", role: .cancel) {}
+            Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Bu işlem geri alınamaz.")
+            Text("This action cannot be undone.")
         }
+    }
+
+    private var languagePicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Language")
+                .font(.caption.weight(.medium))
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                ForEach(AppLanguage.allCases) { language in
+                    let isSelected = languageStore.effective == language
+                    Button {
+                        HapticFeedback.selection()
+                        Task { await authViewModel.setPreferredLanguage(language) }
+                    } label: {
+                        Text(verbatim: language.nativeName)
+                            .font(.footnote.weight(.medium))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(isSelected ? Theme.navy : Theme.navy.opacity(0.08))
+                            .foregroundStyle(isSelected ? .white : Theme.navy)
+                            .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
 #Preview {
     SettingsView()
         .environmentObject(AuthViewModel())
+        .environmentObject(LanguageStore.shared)
 }

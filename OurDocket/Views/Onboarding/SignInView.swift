@@ -11,7 +11,7 @@ struct SignInView: View {
 
             VStack(spacing: 24) {
                 #if DEBUG
-                Button("Debug: Anonim Giriş") {
+                Button("Debug: Anonymous Sign-In") {
                     Task { await authViewModel.signInAnonymouslyForDebug() }
                 }
                 .font(.footnote)
@@ -30,7 +30,7 @@ struct SignInView: View {
                         .font(.system(.largeTitle, design: .serif, weight: .bold))
                         .foregroundStyle(Theme.navy)
 
-                    Text("İlişkinizin resmi dosyası")
+                    Text("The official record of your relationship")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

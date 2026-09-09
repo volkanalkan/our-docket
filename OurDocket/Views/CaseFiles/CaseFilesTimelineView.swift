@@ -60,7 +60,7 @@ struct CaseFilesTimelineView: View {
                         HapticFeedback.tap()
                         onEdit(file)
                     } label: {
-                        Label("Düzenle", systemImage: "pencil")
+                        Label("Edit", systemImage: "pencil")
                     }
                     .tint(Theme.navy)
                 }
@@ -69,7 +69,7 @@ struct CaseFilesTimelineView: View {
                         HapticFeedback.tap()
                         onDelete(file)
                     } label: {
-                        Label("Sil", systemImage: "trash")
+                        Label("Delete", systemImage: "trash")
                     }
                 }
             }
@@ -79,10 +79,10 @@ struct CaseFilesTimelineView: View {
     }
 
     private func dateLabel(for file: CaseFile) -> String {
-        guard let start = file.eventStartDate?.dateValue() else { return "Tarih yok" }
+        guard let start = file.eventStartDate?.dateValue() else { return AppLanguage.localized("No date") }
         guard let end = file.eventEndDate?.dateValue(), !Calendar.current.isDate(end, inSameDayAs: start) else {
-            return start.formatted(date: .abbreviated, time: .omitted)
+            return start.formatted(appStyle: .abbreviated)
         }
-        return "\(start.formatted(date: .abbreviated, time: .omitted)) – \(end.formatted(date: .abbreviated, time: .omitted))"
+        return "\(start.formatted(appStyle: .abbreviated)) – \(end.formatted(appStyle: .abbreviated))"
     }
 }

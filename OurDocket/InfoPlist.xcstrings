@@ -1,0 +1,40 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSCalendarsFullAccessUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar access is needed to add your milestones to Apple Calendar."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dönüm noktalarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor."
+          }
+        }
+      }
+    },
+    "NSCalendarsWriteOnlyAccessUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendar access is needed to add your milestones to Apple Calendar."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dönüm noktalarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

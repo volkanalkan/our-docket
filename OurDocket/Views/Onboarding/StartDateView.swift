@@ -12,13 +12,13 @@ struct StartDateView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 24) {
-                Text("İlişkinizin Başlangıcı")
+                Text("The Beginning of Your Relationship")
                     .font(.system(.title, design: .serif, weight: .bold))
                     .foregroundStyle(Theme.navy)
                     .multilineTextAlignment(.center)
 
                 DatePicker(
-                    "Başlangıç Tarihi",
+                    "Start Date",
                     selection: $startDate,
                     in: ...Date(),
                     displayedComponents: .date
@@ -46,7 +46,7 @@ struct StartDateView: View {
                         }
                     }
                 } label: {
-                    Text("Kaydet")
+                    Text("Save")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.ourDocketPrimary)

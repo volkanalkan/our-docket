@@ -1,11 +1,21 @@
 import Foundation
+import SwiftUI
 import FirebaseFirestore
 
-enum DecisionSort: String, CaseIterable, Identifiable {
-    case newestFirst = "Yeniden Eskiye"
-    case oldestFirst = "Eskiden Yeniye"
-    case manual = "Karışık (Elle Sırala)"
-    var id: String { rawValue }
+enum DecisionSort: CaseIterable, Identifiable {
+    case newestFirst
+    case oldestFirst
+    case manual
+
+    var id: Self { self }
+
+    var title: LocalizedStringKey {
+        switch self {
+        case .newestFirst: "Newest First"
+        case .oldestFirst: "Oldest First"
+        case .manual: "Manual Order"
+        }
+    }
 }
 
 @MainActor

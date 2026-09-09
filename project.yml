@@ -4,6 +4,7 @@ options:
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
+  developmentLanguage: en
 
 packages:
   Firebase:
@@ -22,12 +23,15 @@ targets:
       path: Generated/Info.plist
       properties:
         CFBundleDisplayName: "Our Docket"
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, tr]
         ITSAppUsesNonExemptEncryption: false
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
-        NSCalendarsFullAccessUsageDescription: "Kararlarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor."
-        NSCalendarsWriteOnlyAccessUsageDescription: "Kararlarını Apple Takvim'ine ekleyebilmek için takvim erişimi gerekiyor."
+        # Localized per system language via InfoPlist.xcstrings.
+        NSCalendarsFullAccessUsageDescription: "Calendar access is needed to add your milestones to Apple Calendar."
+        NSCalendarsWriteOnlyAccessUsageDescription: "Calendar access is needed to add your milestones to Apple Calendar."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.volkan.ourdocket
@@ -63,6 +67,8 @@ targets:
       path: Generated/WidgetInfo.plist
       properties:
         CFBundleDisplayName: "Our Docket"
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, tr]
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:

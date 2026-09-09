@@ -12,7 +12,11 @@ struct RelationshipCounterView: View {
             )
 
             VStack(spacing: 6) {
-                Text("\(components.year ?? 0) yıl, \(components.month ?? 0) ay, \(components.day ?? 0) gün")
+                (Text("\(components.year ?? 0) years")
+                    + Text(verbatim: ", ")
+                    + Text("\(components.month ?? 0) months")
+                    + Text(verbatim: ", ")
+                    + Text("\(components.day ?? 0) days"))
                     .font(.system(.headline, design: .serif, weight: .semibold))
                     .foregroundStyle(Theme.navy)
 

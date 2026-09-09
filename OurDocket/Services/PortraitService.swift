@@ -7,7 +7,7 @@ enum PortraitServiceError: LocalizedError {
     case encodingFailed
 
     var errorDescription: String? {
-        "Görsel işlenemedi, lütfen başka bir fotoğraf dene."
+        AppLanguage.localized("The image couldn't be processed, please try another photo.")
     }
 }
 
