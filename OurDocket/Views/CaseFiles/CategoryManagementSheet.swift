@@ -50,6 +50,7 @@ struct CategoryManagementSheet: View {
                                 newCategoryName = ""
                             }
                         }
+                        .buttonStyle(.plain)
                         .disabled(newCategoryName.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
                     .listRowBackground(Color.white.opacity(0.6))

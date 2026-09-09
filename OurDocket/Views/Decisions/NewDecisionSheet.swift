@@ -70,6 +70,7 @@ struct NewDecisionSheet: View {
                                         Image(systemName: "info.circle")
                                             .foregroundStyle(.secondary)
                                     }
+                                    .buttonStyle(.plain)
                                     .popover(isPresented: $showingReminderInfo) {
                                         Text("1 hafta önce (1 hafta kaldı) ve tarihin kendisinde (bugün) olmak üzere, her yıl saat 00:00'da bildirim gönderilir.")
                                             .font(.footnote)

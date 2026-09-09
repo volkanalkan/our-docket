@@ -32,6 +32,7 @@ struct ShortcutCardsView: View {
                     .background(Theme.navy.opacity(0.06))
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
+                .buttonStyle(.plain)
                 .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
             }
         }

@@ -38,6 +38,7 @@ struct HomeView: View {
                         .padding(10)
                         .background(.white.opacity(0.6), in: Circle())
                 }
+                .buttonStyle(.plain)
                 .padding()
             }
             .navigationBarHidden(true)

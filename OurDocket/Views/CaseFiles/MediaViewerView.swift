@@ -37,6 +37,7 @@ struct MediaViewerView: View {
                             .font(.title)
                             .foregroundStyle(.white)
                     }
+                    .buttonStyle(.plain)
                     .padding()
 
                     Spacer()
@@ -49,6 +50,7 @@ struct MediaViewerView: View {
                             .font(.title)
                             .foregroundStyle(.white)
                     }
+                    .buttonStyle(.plain)
                     .padding()
                 }
                 Spacer()

@@ -58,6 +58,7 @@ struct NewCaseFileSheet: View {
                                     .foregroundStyle(.secondary)
                                 Spacer()
                                 Button("Düzenle") { showingCategoryManagement = true }
+                                    .buttonStyle(.plain)
                                     .font(.caption)
                             }
                             categoryPicker
@@ -150,6 +151,7 @@ struct NewCaseFileSheet: View {
                             .foregroundStyle(isSelected ? .white : Theme.navy)
                             .clipShape(Capsule())
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }

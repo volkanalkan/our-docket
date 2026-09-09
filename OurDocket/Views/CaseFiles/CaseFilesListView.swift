@@ -152,6 +152,7 @@ struct CaseFilesListView: View {
                 .foregroundStyle(isSelected ? .white : Theme.navy)
                 .clipShape(Capsule())
         }
+        .buttonStyle(.plain)
     }
 
     private var emptyState: some View {

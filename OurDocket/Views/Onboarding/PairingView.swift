@@ -47,6 +47,7 @@ struct PairingView: View {
                     HapticFeedback.tap()
                     authViewModel.signOut()
                 }
+                .buttonStyle(.plain)
                 .font(.footnote)
             }
             .padding()
@@ -102,6 +103,7 @@ struct PairingView: View {
                 .foregroundStyle(.secondary)
 
             Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }
+                .buttonStyle(.plain)
                 .font(.footnote)
                 .padding(.top, 8)
         }
@@ -139,6 +141,7 @@ struct PairingView: View {
             .disabled(enteredCode.count != 6 || isBusy)
 
             Button("Geri") { HapticFeedback.tap(); withAnimation { mode = .choose } }
+                .buttonStyle(.plain)
                 .font(.footnote)
         }
     }

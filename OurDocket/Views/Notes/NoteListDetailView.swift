@@ -93,6 +93,7 @@ struct NoteListDetailView: View {
                         .font(.title2)
                         .foregroundStyle(Theme.navy)
                 }
+                .buttonStyle(.plain)
                 .disabled(newItemText.trimmingCharacters(in: .whitespaces).isEmpty)
             }
             .padding()
