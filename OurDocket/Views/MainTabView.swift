@@ -39,6 +39,11 @@ struct MainTabView: View {
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @State private var selection: AppTab = .home
+    @State private var tabBarTop: CGFloat = 0
+
+    /// Content stays above this lane so the characters' ground walk never
+    /// covers anything; their flights may briefly rise over the content.
+    private let walkingLaneHeight: CGFloat = 54
 
     var body: some View {
         ZStack {
@@ -55,12 +60,23 @@ struct MainTabView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 0) {
-                AmbientCharactersStrip(
-                    own: authViewModel.user?.character,
-                    partner: authViewModel.partner?.character
+                // Opaque lane (with a soft top fade) so content scrolls out
+                // of view before it reaches the characters' ground walk.
+                LinearGradient(
+                    stops: [.init(color: Theme.cream.opacity(0), location: 0), .init(color: Theme.cream, location: 0.35)],
+                    startPoint: .top, endPoint: .bottom
                 )
-                BottomTabBar(selection: $selection)
+                .frame(height: walkingLaneHeight)
+                .allowsHitTesting(false)
+                BottomTabBar(selection: $selection, topEdge: $tabBarTop)
             }
+        }
+        .overlay {
+            AmbientCharactersLayer(
+                own: authViewModel.user?.character,
+                partner: authViewModel.partner?.character,
+                tabBarTop: tabBarTop
+            )
         }
     }
 
@@ -83,6 +99,8 @@ struct MainTabView: View {
 
 struct BottomTabBar: View {
     @Binding var selection: AppTab
+    /// Global y of the bar's top edge — the ambient characters' ground line.
+    var topEdge: Binding<CGFloat>? = nil
 
     var body: some View {
         HStack(spacing: 0) {
@@ -115,6 +133,14 @@ struct BottomTabBar: View {
             Rectangle()
                 .fill(Theme.navy.opacity(0.08))
                 .frame(height: 1)
+        }
+        .background {
+            GeometryReader { geometry in
+                let top = geometry.frame(in: .global).minY
+                Color.clear
+                    .onAppear { topEdge?.wrappedValue = top }
+                    .onChange(of: top) { _, newValue in topEdge?.wrappedValue = newValue }
+            }
         }
     }
 }
