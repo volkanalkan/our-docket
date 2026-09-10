@@ -17,6 +17,7 @@ final class AuthViewModel: ObservableObject {
 
     @Published private(set) var state: AppState = .loading
     @Published private(set) var user: AppUser?
+    @Published private(set) var partner: AppUser?
     @Published private(set) var couple: Couple?
     @Published var errorMessage: String?
 
@@ -29,7 +30,9 @@ final class AuthViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var userListener: ListenerRegistration?
     private var coupleListener: ListenerRegistration?
+    private var partnerListener: ListenerRegistration?
     private var observedCoupleId: String?
+    private var observedPartnerUid: String?
 
     init(authService: AuthService? = nil) {
         self.authService = authService ?? AuthService()
@@ -45,6 +48,7 @@ final class AuthViewModel: ObservableObject {
         userListener?.remove()
         coupleListener?.remove()
         observedCoupleId = nil
+        observePartner(uid: nil)
 
         guard let user else {
             self.user = nil
@@ -123,6 +127,7 @@ final class AuthViewModel: ObservableObject {
         coupleListener?.remove()
 
         guard let coupleId, !coupleId.isEmpty else {
+            observePartner(uid: nil)
             state = .needsPairing
             return
         }
@@ -132,9 +137,25 @@ final class AuthViewModel: ObservableObject {
                 guard let self else { return }
                 let couple = try? snapshot?.data(as: Couple.self)
                 self.couple = couple
+                self.observePartner(uid: couple?.memberUids.first { $0 != self.currentUserId })
                 SharedRelationshipStore.save(startDate: couple?.relationshipStartDate?.dateValue())
                 WidgetCenter.shared.reloadAllTimelines()
                 self.state = couple?.relationshipStartDate != nil ? .ready(coupleId: coupleId) : .needsStartDate(coupleId: coupleId)
+            }
+    }
+
+    /// The partner's profile (name, character) is read live so their
+    /// character updates on this device the moment they change it.
+    private func observePartner(uid: String?) {
+        guard uid != observedPartnerUid else { return }
+        observedPartnerUid = uid
+        partnerListener?.remove()
+        partner = nil
+
+        guard let uid else { return }
+        partnerListener = Firestore.firestore().collection("users").document(uid)
+            .addSnapshotListener { [weak self] snapshot, _ in
+                self?.partner = try? snapshot?.data(as: AppUser.self)
             }
     }
 

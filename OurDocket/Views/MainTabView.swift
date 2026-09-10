@@ -37,6 +37,7 @@ enum AppTab: CaseIterable, Identifiable {
 struct MainTabView: View {
     let coupleId: String
 
+    @EnvironmentObject private var authViewModel: AuthViewModel
     @State private var selection: AppTab = .home
 
     var body: some View {
@@ -53,7 +54,13 @@ struct MainTabView: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            BottomTabBar(selection: $selection)
+            VStack(spacing: 0) {
+                AmbientCharactersStrip(
+                    own: authViewModel.user?.character,
+                    partner: authViewModel.partner?.character
+                )
+                BottomTabBar(selection: $selection)
+            }
         }
     }
 
