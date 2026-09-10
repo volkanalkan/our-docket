@@ -13,16 +13,19 @@ struct RootView: View {
                 SignInView()
             case _ where languageStore.selection == nil:
                 LanguageSelectionView()
+            case _ where authViewModel.user?.username == nil:
+                IdentitySetupView()
             case .needsPairing:
                 PairingView()
             case .needsStartDate(let coupleId):
                 StartDateView(coupleId: coupleId)
             case .ready(let coupleId):
-                HomeView(coupleId: coupleId)
+                MainTabView(coupleId: coupleId)
             }
         }
         .animation(.default, value: authViewModel.state)
         .animation(.default, value: languageStore.selection)
+        .animation(.default, value: authViewModel.user?.username)
     }
 }
 

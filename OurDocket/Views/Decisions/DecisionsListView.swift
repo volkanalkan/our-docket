@@ -18,7 +18,7 @@ struct DecisionsListView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                HeaderBar(title: "Milestones") {
+                HeaderBar(title: "Milestones", showBack: false) {
                     HStack(spacing: 8) {
                         sortMenu
                         HeaderIconButton(systemImage: "plus") { showingNewSheet = true }

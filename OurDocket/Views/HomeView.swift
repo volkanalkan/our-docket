@@ -2,54 +2,36 @@ import SwiftUI
 
 struct HomeView: View {
     let coupleId: String
+    @Binding var selectedTab: AppTab
 
     @EnvironmentObject private var authViewModel: AuthViewModel
     @State private var showingPortraitEditor = false
-    @State private var showingSettings = false
     @State private var portraitImage: UIImage?
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .topTrailing) {
-                Theme.cream.ignoresSafeArea()
+        ZStack {
+            Theme.cream.ignoresSafeArea()
 
-                ScrollView {
-                    VStack(spacing: 28) {
-                        portraitHeader
+            ScrollView {
+                VStack(spacing: 28) {
+                    portraitHeader
 
-                        if let startDate = authViewModel.couple?.relationshipStartDate?.dateValue() {
-                            RelationshipCounterView(startDate: startDate)
-                        }
-
-                        ShortcutCardsView(coupleId: coupleId)
-                            .padding(.horizontal)
+                    if let startDate = authViewModel.couple?.relationshipStartDate?.dateValue() {
+                        RelationshipCounterView(startDate: startDate)
                     }
-                    .padding(.top, 32)
-                    .padding(.bottom, 40)
-                }
 
-                Button {
-                    HapticFeedback.tap()
-                    showingSettings = true
-                } label: {
-                    Image(systemName: "gearshape.fill")
-                        .font(.title3)
-                        .foregroundStyle(Theme.navy)
-                        .padding(10)
-                        .background(.white.opacity(0.6), in: Circle())
+                    ShortcutCardsView(selectedTab: $selectedTab)
+                        .padding(.horizontal)
                 }
-                .buttonStyle(.plain)
-                .padding()
+                .padding(.top, 32)
+                .padding(.bottom, 40)
             }
-            .navigationBarHidden(true)
         }
+        .navigationBarHidden(true)
         .sheet(isPresented: $showingPortraitEditor) {
             PortraitCropView(coupleId: coupleId) {
                 showingPortraitEditor = false
             }
-        }
-        .sheet(isPresented: $showingSettings) {
-            SettingsView()
         }
         .task(id: authViewModel.couple?.homePortraitPath) {
             await loadPortrait()
@@ -104,6 +86,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(coupleId: "preview-couple-id")
+    HomeView(coupleId: "preview-couple-id", selectedTab: .constant(.home))
         .environmentObject(AuthViewModel())
 }

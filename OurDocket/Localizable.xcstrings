@@ -141,6 +141,23 @@
         }
       }
     },
+    "3–20 characters: letters, numbers, dots and underscores.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3–20 characters: letters, numbers, dots and underscores."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3–20 karakter: harf, rakam, nokta ve alt çizgi."
+          }
+        }
+      }
+    },
     "6-digit code": {
       "extractionState": "manual",
       "localizations": {
@@ -583,6 +600,23 @@
         }
       }
     },
+    "Continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devam Et"
+          }
+        }
+      }
+    },
     "Create": {
       "extractionState": "manual",
       "localizations": {
@@ -906,6 +940,23 @@
         }
       }
     },
+    "Edit Profile": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Profile"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profili Düzenle"
+          }
+        }
+      }
+    },
     "End": {
       "extractionState": "manual",
       "localizations": {
@@ -957,6 +1008,23 @@
         }
       }
     },
+    "Home": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ana Sayfa"
+          }
+        }
+      }
+    },
     "In 1 week: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -987,6 +1055,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Takvimde"
+          }
+        }
+      }
+    },
+    "Introduce Yourself": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Introduce Yourself"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kendini Tanıt"
           }
         }
       }
@@ -1089,6 +1174,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dönüm Noktaları"
+          }
+        }
+      }
+    },
+    "Name": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İsim"
           }
         }
       }
@@ -1378,6 +1480,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tarih Seç"
+          }
+        }
+      }
+    },
+    "Profile": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
+          }
+        }
+      }
+    },
+    "Relationship start": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relationship start"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlişki başlangıcı"
           }
         }
       }
@@ -1841,6 +1977,23 @@
         }
       }
     },
+    "This username is already taken.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This username is already taken."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kullanıcı adı alınmış."
+          }
+        }
+      }
+    },
     "Timeline": {
       "extractionState": "manual",
       "localizations": {
@@ -1960,6 +2113,23 @@
         }
       }
     },
+    "Username": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Username"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kullanıcı Adı"
+          }
+        }
+      }
+    },
     "View": {
       "extractionState": "manual",
       "localizations": {
@@ -2011,6 +2181,23 @@
         }
       }
     },
+    "Your partner will see you by this name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your partner will see you by this name."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partnerin seni bu isimle görecek."
+          }
+        }
+      }
+    },
     "e.g. Cappadocia Trip": {
       "extractionState": "manual",
       "localizations": {
@@ -2058,6 +2245,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "örn. Market Alışverişi"
+          }
+        }
+      }
+    },
+    "e.g. Volkan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Volkan"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "örn. Volkan"
+          }
+        }
+      }
+    },
+    "username": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "username"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kullaniciadi"
           }
         }
       }

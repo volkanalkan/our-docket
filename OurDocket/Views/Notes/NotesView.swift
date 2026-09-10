@@ -25,7 +25,7 @@ struct NotesView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 12) {
-                HeaderBar(title: "Notes") {
+                HeaderBar(title: "Notes", showBack: false) {
                     HeaderIconButton(systemImage: "plus") {
                         newListTitle = ""
                         showingNewListAlert = true

@@ -1,38 +1,21 @@
 import SwiftUI
 
-enum ShortcutDestination: CaseIterable, Hashable {
-    case archive
-    case notes
-    case milestones
-
-    var title: LocalizedStringKey {
-        switch self {
-        case .archive: "Archive"
-        case .notes: "Notes"
-        case .milestones: "Milestones"
-        }
-    }
-
-    var systemImage: String {
-        switch self {
-        case .archive: "folder.fill"
-        case .notes: "checklist"
-        case .milestones: "seal.fill"
-        }
-    }
-}
-
 struct ShortcutCardsView: View {
-    let coupleId: String
+    @Binding var selectedTab: AppTab
+
+    private let shortcuts: [AppTab] = [.archive, .notes, .milestones]
 
     var body: some View {
         HStack(spacing: 12) {
-            ForEach(ShortcutDestination.allCases, id: \.self) { destination in
-                NavigationLink(value: destination) {
+            ForEach(shortcuts) { tab in
+                Button {
+                    HapticFeedback.tap()
+                    selectedTab = tab
+                } label: {
                     VStack(spacing: 8) {
-                        Image(systemName: destination.systemImage)
+                        Image(systemName: tab.systemImage)
                             .font(.title2)
-                        Text(destination.title)
+                        Text(tab.title)
                             .font(.caption)
                             .multilineTextAlignment(.center)
                     }
@@ -43,24 +26,11 @@ struct ShortcutCardsView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
                 .buttonStyle(.plain)
-                .simultaneousGesture(TapGesture().onEnded { HapticFeedback.tap() })
-            }
-        }
-        .navigationDestination(for: ShortcutDestination.self) { destination in
-            switch destination {
-            case .archive:
-                CaseFilesListView(coupleId: coupleId)
-            case .notes:
-                NotesView(coupleId: coupleId)
-            case .milestones:
-                DecisionsListView(coupleId: coupleId)
             }
         }
     }
 }
 
 #Preview {
-    NavigationStack {
-        ShortcutCardsView(coupleId: "preview").padding()
-    }
+    ShortcutCardsView(selectedTab: .constant(.home)).padding()
 }

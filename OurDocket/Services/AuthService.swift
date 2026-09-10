@@ -64,8 +64,11 @@ final class AuthService: ObservableObject {
     /// If Firebase reports the sign-in is too old for this sensitive an
     /// operation, surface that as a clear error rather than silently
     /// re-authenticating on the user's behalf.
-    func deleteAccount() async throws {
+    func deleteAccount(username: String?) async throws {
         guard let user = Auth.auth().currentUser else { return }
+        if let username {
+            try await Firestore.firestore().collection("usernames").document(username).delete()
+        }
         try await Firestore.firestore().collection("users").document(user.uid).delete()
         try await user.delete()
     }

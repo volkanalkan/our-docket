@@ -53,7 +53,7 @@ struct CaseFilesListView: View {
             Theme.cream.ignoresSafeArea()
 
             VStack(spacing: 16) {
-                HeaderBar(title: "Archive") {
+                HeaderBar(title: "Archive", showBack: false) {
                     HStack(spacing: 8) {
                         if displayMode == .timeline {
                             timelineSortMenu

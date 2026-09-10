@@ -16,6 +16,7 @@ final class AuthViewModel: ObservableObject {
     }
 
     @Published private(set) var state: AppState = .loading
+    @Published private(set) var user: AppUser?
     @Published private(set) var couple: Couple?
     @Published var errorMessage: String?
 
@@ -23,6 +24,7 @@ final class AuthViewModel: ObservableObject {
 
     private let authService: AuthService
     private let pairingService = PairingService()
+    private let identityService = IdentityService()
 
     private var cancellables = Set<AnyCancellable>()
     private var userListener: ListenerRegistration?
@@ -45,6 +47,7 @@ final class AuthViewModel: ObservableObject {
         observedCoupleId = nil
 
         guard let user else {
+            self.user = nil
             couple = nil
             SharedRelationshipStore.save(startDate: nil)
             WidgetCenter.shared.reloadAllTimelines()
@@ -56,6 +59,7 @@ final class AuthViewModel: ObservableObject {
             .addSnapshotListener { [weak self] snapshot, _ in
                 guard let self else { return }
                 let appUser = try? snapshot?.data(as: AppUser.self)
+                self.user = appUser
                 // The server copy is the cross-device source of truth for the
                 // language; skip local-echo snapshots so a fresh pick can't be
                 // momentarily overwritten by the value it's replacing.
@@ -65,6 +69,23 @@ final class AuthViewModel: ObservableObject {
                 }
                 self.handleUserDocument(coupleId: appUser?.coupleId)
             }
+    }
+
+    func saveIdentity(name: String, username: String) async -> Bool {
+        guard let uid = currentUserId else { return false }
+        errorMessage = nil
+        do {
+            try await identityService.claim(
+                username: username,
+                name: name.trimmingCharacters(in: .whitespacesAndNewlines),
+                uid: uid,
+                previousUsername: user?.username
+            )
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
     }
 
     func setPreferredLanguage(_ language: AppLanguage) async {
@@ -134,7 +155,7 @@ final class AuthViewModel: ObservableObject {
     func deleteAccount() async {
         errorMessage = nil
         do {
-            try await authService.deleteAccount()
+            try await authService.deleteAccount(username: user?.username)
         } catch {
             errorMessage = error.localizedDescription
         }
