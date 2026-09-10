@@ -5,6 +5,7 @@ struct ProfileView: View {
     @EnvironmentObject private var languageStore: LanguageStore
 
     @State private var showingEditor = false
+    @State private var showingCharacterEditor = false
     @State private var showingDeleteConfirmation = false
     @State private var isDeleting = false
 
@@ -71,6 +72,9 @@ struct ProfileView: View {
         .sheet(isPresented: $showingEditor) {
             IdentitySetupView(mode: .edit)
         }
+        .sheet(isPresented: $showingCharacterEditor) {
+            CharacterCreatorView(mode: .edit)
+        }
         .confirmationDialog(
             "Are you sure you want to delete your account?",
             isPresented: $showingDeleteConfirmation,
@@ -92,16 +96,36 @@ struct ProfileView: View {
         }
     }
 
-    /// Initials stand in until the character (8c) replaces them.
     private var identityCard: some View {
         VStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(Theme.navy)
-                    .frame(width: 88, height: 88)
-                Text(initials)
-                    .font(.system(.title, design: .serif, weight: .bold))
-                    .foregroundStyle(Theme.cream)
+            if let character = authViewModel.user?.character {
+                Button {
+                    HapticFeedback.tap()
+                    showingCharacterEditor = true
+                } label: {
+                    VStack(spacing: 6) {
+                        CharacterView(appearance: character)
+                            .frame(height: 240)
+                        Text("Tap to edit")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(.white.opacity(0.6))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(Theme.navy.opacity(0.08)))
+                }
+                .buttonStyle(.plain)
+            } else {
+                ZStack {
+                    Circle()
+                        .fill(Theme.navy)
+                        .frame(width: 88, height: 88)
+                    Text(initials)
+                        .font(.system(.title, design: .serif, weight: .bold))
+                        .foregroundStyle(Theme.cream)
+                }
             }
 
             Text(authViewModel.user?.displayName ?? "")

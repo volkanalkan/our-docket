@@ -15,6 +15,8 @@ struct RootView: View {
                 LanguageSelectionView()
             case _ where authViewModel.user?.username == nil:
                 IdentitySetupView()
+            case _ where authViewModel.user?.character == nil:
+                CharacterCreatorView()
             case .needsPairing:
                 PairingView()
             case .needsStartDate(let coupleId):
@@ -26,6 +28,7 @@ struct RootView: View {
         .animation(.default, value: authViewModel.state)
         .animation(.default, value: languageStore.selection)
         .animation(.default, value: authViewModel.user?.username)
+        .animation(.default, value: authViewModel.user?.character)
     }
 }
 

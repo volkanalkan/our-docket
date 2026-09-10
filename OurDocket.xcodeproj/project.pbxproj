@@ -18,6 +18,7 @@
 		1A90D267C1B874276F162A3F /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5106CEF01E60E452D3058096 /* SignInView.swift */; };
 		1DBD14C97AAFD39187D1D485 /* DecisionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9286A820851B1CCEE91DC64 /* DecisionCardView.swift */; };
 		227B9C6485BDD854DC189DF9 /* CaseFileDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858AAB2B4E9971636AB60FC8 /* CaseFileDetailView.swift */; };
+		23C01A5FDF24535BFECA27AA /* CharacterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A63F23FDB20948FE96FAD2 /* CharacterView.swift */; };
 		26CE5A606ED82B8280B36D26 /* PortraitCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B4B280995CEA93012E68E9E /* PortraitCropView.swift */; };
 		29AB38EC03690AB12B27A0F8 /* Couple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4D3A49117E04EFB1C744A4 /* Couple.swift */; };
 		3100B56C8FD9619B772D4404 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DFD8B33EA30E398BF9AD89 /* HapticFeedback.swift */; };
@@ -25,8 +26,10 @@
 		370F4CBE7D2F785689A751FA /* StartDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F828BAD0A8079B36091EAF83 /* StartDateView.swift */; };
 		38CD074848882F7AD01E0BB1 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D0D52C18E9D8651014454C /* RootView.swift */; };
 		3A626BF47B710E34979AE33D /* CaseFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1ADF66F322778C229A0D5B4 /* CaseFileService.swift */; };
+		3B0A80DED7C1535EF2FD8DCE /* CharacterCreatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7EC4B544D9D35213B7F0F8F /* CharacterCreatorView.swift */; };
 		3B1616257F88B3120D8CDE03 /* Decision.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D50BBEAF81A874C9A2DC77 /* Decision.swift */; };
 		42B7896A6F44BFD3F04DDD26 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBFC7C9C6E5053A83326851 /* Theme.swift */; };
+		42DE118B21D15C031B8FD704 /* CharacterAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5632594359CF9B0012B3C264 /* CharacterAppearance.swift */; };
 		4BD00B1FBDF2CCDE53ED4844 /* RelationshipCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840B75111F957B04272E797B /* RelationshipCounterView.swift */; };
 		4E53E5321094AD3E82B5E01D /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = ABCAA589C528E3A33410E072 /* FirebaseCore */; };
 		5781885AB3D356D493087033 /* DecisionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249FCC2FD33586CEE62DCC24 /* DecisionsListView.swift */; };
@@ -124,6 +127,7 @@
 		479A0F779956A0014A1D487A /* PortraitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortraitService.swift; sourceTree = "<group>"; };
 		4C516C8BAF4B3E22E50670BE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5106CEF01E60E452D3058096 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		5632594359CF9B0012B3C264 /* CharacterAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterAppearance.swift; sourceTree = "<group>"; };
 		5ABD03B0FC975357032DFDA3 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		5FFAF5380E26B245AB8B9F47 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		615DC685DBAA2E5002004EE6 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 		A1ADF66F322778C229A0D5B4 /* CaseFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFileService.swift; sourceTree = "<group>"; };
 		A5FA4BDDBD3ED137FBB86A04 /* NewCaseFileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCaseFileSheet.swift; sourceTree = "<group>"; };
 		A9286A820851B1CCEE91DC64 /* DecisionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecisionCardView.swift; sourceTree = "<group>"; };
+		B7EC4B544D9D35213B7F0F8F /* CharacterCreatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCreatorView.swift; sourceTree = "<group>"; };
 		BCFCCB8E9A8DCA46C15B6F6B /* OurDocket.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OurDocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEC97AA3663B7E60CB4C138E /* CaseFilesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseFilesListView.swift; sourceTree = "<group>"; };
 		C8D68CC399962C6936B3F8D4 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -150,6 +155,7 @@
 		D26C2639C337AFB2EB70B5C5 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		DBE64B33D263ECB0A0FF8004 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DF48F1E120A92AFFE6ED9219 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
+		E0A63F23FDB20948FE96FAD2 /* CharacterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterView.swift; sourceTree = "<group>"; };
 		E0D50BBEAF81A874C9A2DC77 /* Decision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decision.swift; sourceTree = "<group>"; };
 		F026BBFF86CE5886AD528551 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		F26E182AF29BE9D973CA0056 /* OurDocketWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OurDocketWidgetBundle.swift; sourceTree = "<group>"; };
@@ -204,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				78CBA7E01B8F74DBEE4C971C /* CaseFile.swift */,
+				5632594359CF9B0012B3C264 /* CharacterAppearance.swift */,
 				7F4D3A49117E04EFB1C744A4 /* Couple.swift */,
 				E0D50BBEAF81A874C9A2DC77 /* Decision.swift */,
 				1C52077A4FC0126B911E6C4C /* NoteList.swift */,
@@ -241,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				D26C2639C337AFB2EB70B5C5 /* ButtonStyles.swift */,
+				E0A63F23FDB20948FE96FAD2 /* CharacterView.swift */,
 				7FEDB0FB5D7187B9CBA26AF8 /* HeaderBar.swift */,
 				615DC685DBAA2E5002004EE6 /* ImageCache.swift */,
 				F35605A7CD27566F8F15D6BB /* RandomAppearance.swift */,
@@ -291,6 +299,7 @@
 				C8D68CC399962C6936B3F8D4 /* MainTabView.swift */,
 				F6D0D52C18E9D8651014454C /* RootView.swift */,
 				7A6E9165F0F2E32B4826BCCC /* CaseFiles */,
+				DC5639796B332B4C0FCD5976 /* Character */,
 				C114D24E40EEFDA95C746632 /* Decisions */,
 				8F75651B93917885D98C65E8 /* Home */,
 				CA4686AF0B55BDA3DD90CDF3 /* Notes */,
@@ -348,6 +357,14 @@
 				2FD01B7480B26655DDEF8EC6 /* OurDocketApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		DC5639796B332B4C0FCD5976 /* Character */ = {
+			isa = PBXGroup;
+			children = (
+				B7EC4B544D9D35213B7F0F8F /* CharacterCreatorView.swift */,
+			);
+			path = Character;
 			sourceTree = "<group>";
 		};
 		ECB489F1331EB214A2C798F8 /* Profile */ = {
@@ -518,6 +535,9 @@
 				5CF53232B518274B2EDFEF45 /* CaseFilesTimelineView.swift in Sources */,
 				DD86FE8BB1B5F35E435180BB /* CaseFilesViewModel.swift in Sources */,
 				8A3D2B0D9D181EA107B7959F /* CategoryManagementSheet.swift in Sources */,
+				42DE118B21D15C031B8FD704 /* CharacterAppearance.swift in Sources */,
+				3B0A80DED7C1535EF2FD8DCE /* CharacterCreatorView.swift in Sources */,
+				23C01A5FDF24535BFECA27AA /* CharacterView.swift in Sources */,
 				29AB38EC03690AB12B27A0F8 /* Couple.swift in Sources */,
 				3B1616257F88B3120D8CDE03 /* Decision.swift in Sources */,
 				1DBD14C97AAFD39187D1D485 /* DecisionCardView.swift in Sources */,

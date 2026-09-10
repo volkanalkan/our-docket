@@ -88,6 +88,20 @@ final class AuthViewModel: ObservableObject {
         }
     }
 
+    func saveCharacter(_ appearance: CharacterAppearance) async -> Bool {
+        guard let uid = currentUserId else { return false }
+        errorMessage = nil
+        do {
+            let encoded = try Firestore.Encoder().encode(appearance)
+            try await Firestore.firestore().collection("users").document(uid)
+                .setData(["character": encoded], merge: true)
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
     func setPreferredLanguage(_ language: AppLanguage) async {
         LanguageStore.shared.select(language)
         WidgetCenter.shared.reloadAllTimelines()

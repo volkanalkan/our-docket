@@ -14,5 +14,6 @@ struct AppUser: Codable, Identifiable {
     /// "en" | "tr" — the in-app choice, mirrored here so a new device picks
     /// it up without asking again.
     var preferredLanguage: String?
+    var character: CharacterAppearance?
     @ServerTimestamp var createdAt: Timestamp?
 }

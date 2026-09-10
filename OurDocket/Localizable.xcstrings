@@ -515,6 +515,23 @@
         }
       }
     },
+    "Boy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boy"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkek"
+          }
+        }
+      }
+    },
     "Cancel": {
       "extractionState": "manual",
       "localizations": {
@@ -647,6 +664,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Davet Kodu Oluştur"
+          }
+        }
+      }
+    },
+    "Create Your Character": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create Your Character"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karakterini Oluştur"
           }
         }
       }
@@ -906,6 +940,23 @@
         }
       }
     },
+    "Edit Character": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit Character"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Karakteri Düzenle"
+          }
+        }
+      }
+    },
     "Edit File": {
       "extractionState": "manual",
       "localizations": {
@@ -987,6 +1038,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "Davet Kodu Gir"
+          }
+        }
+      }
+    },
+    "Gender": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gender"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cinsiyet"
+          }
+        }
+      }
+    },
+    "Girl": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Girl"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kız"
+          }
+        }
+      }
+    },
+    "Hair": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hair"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saç"
           }
         }
       }
@@ -1433,6 +1535,23 @@
         }
       }
     },
+    "Outfit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outfit"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kıyafet"
+          }
+        }
+      }
+    },
     "Pair": {
       "extractionState": "manual",
       "localizations": {
@@ -1497,6 +1616,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Profil"
+          }
+        }
+      }
+    },
+    "Random": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Random"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rastgele"
           }
         }
       }
@@ -1722,6 +1858,23 @@
         }
       }
     },
+    "Skin Tone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skin Tone"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ten Rengi"
+          }
+        }
+      }
+    },
     "Special Day": {
       "extractionState": "manual",
       "localizations": {
@@ -1786,6 +1939,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sekme adı"
+          }
+        }
+      }
+    },
+    "Tap to edit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to edit"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzenlemek için dokun"
           }
         }
       }
